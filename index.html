@@ -1,13 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>SmartShape Designer</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/main.js"></script>
-  </body>
+</head>
+<body class="dark-mode sidebar-mini layout-fixed layout-navbar-fixed">
+<div class="wrapper" style="display:none">
+    <nav class="main-header navbar navbar-expand navbar-dark" include="templates/header.html">
+    </nav>
+    <aside class="main-sidebar sidebar-dark-primary elevation-4" include="templates/sidebar.html">
+    </aside>
+    <div class="content-wrapper" style="min-height: 900px;">
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Shape</h3>
+                                <div class="card-tools">
+                                    <span class="fa fa-bars"></span>
+                                </div>
+                            </div>
+                            <div class="card-body" include="templates/editor.html">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Options</h3>
+                                <div class="card-tools">
+                                    <span class="fa fa-bars"></span>
+                                </div>
+                            </div>
+                            <div class="card-body" include="templates/options.html">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <aside class="control-sidebar control-sidebar-dark" style="display: none; top: 57px;">
+        <h3>Contents</h3>
+    </aside>
+    <div id="sidebar-overlay"></div>
+</div>
+<script type="module" src="./main.js"></script>
+</body>
 </html>
