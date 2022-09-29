@@ -1,13 +1,22 @@
 import {EventsManager, SmartShape, SmartShapeManager,ShapeEvents} from "./smart_shape/src/index.js";
 import {Events} from "./events.js";
+import sampleCollection from "./examples/example.json";
+
 export default function ShapesPanel() {
 
     this.collectionName = "new";
 
     this.shapes = [];
     this.element = document.querySelector("#shapes_panel");
-    this.init = () => {
+    this.init = async() => {
         this.setEventListeners();
+        SmartShapeManager.fromJSON(document.querySelector("#shape_container"),JSON.stringify(sampleCollection));
+        setTimeout(async() => {
+            for (let shape of SmartShapeManager.getShapes()) {
+                await this.updateShape(shape);
+            }
+            EventsManager.emit(Events.SELECT_SHAPE,SmartShapeManager.getShapes()[0]);
+        },100)
     }
 
     this.setEventListeners = () => {
@@ -45,6 +54,9 @@ export default function ShapesPanel() {
                 event.target.points.length) {
                 await this.updateShape(event.target);
             }
+        });
+        EventsManager.subscribe(Events.CHANGE_SHAPE_OPTIONS,async(event) => {
+            await this.updateShape(event.target);
         });
     }
 
@@ -173,7 +185,7 @@ export default function ShapesPanel() {
             reader.onloadend = (event) => {
                 SmartShapeManager.clear();
                 SmartShapeManager.fromJSON(document.querySelector("#shape_container"),event.target.result);
-                if (SmartShapeManager.getShapes().length == 0) {
+                if (SmartShapeManager.getShapes().length === 0) {
                     alert("Could not load collection");
                 }
             }

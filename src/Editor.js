@@ -23,6 +23,7 @@ export default function Editor() {
         this.element.querySelector("#newBtn").addEventListener("click",this.addShape);
         EventsManager.subscribe(Events.SELECT_SHAPE,this.selectShape)
         EventsManager.subscribe("destroy", this.onShapeDestroyed)
+        EventsManager.subscribe(Events.CHANGE_SHAPE_OPTIONS,this.onChangeShapeOptions);
     }
 
     this.addShape = () => {
@@ -53,6 +54,12 @@ export default function Editor() {
         if (event.target === this.selectedShape) {
             this.selectedShape = null;
             this.setDisplayMode();
+        }
+    }
+
+    this.onChangeShapeOptions = (event) => {
+        if (event.target === this.selectedShape) {
+            this.selectedShape.redraw();
         }
     }
 }

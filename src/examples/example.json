@@ -1,0 +1,1382 @@
+[
+  {
+    "options": {
+      "id": "shape_0",
+      "name": "Shape #0",
+      "maxPoints": -1,
+      "stroke": "rgb(0,0,0)",
+      "strokeWidth": "2",
+      "strokeLinecap": "",
+      "strokeDasharray": "",
+      "fill": "none",
+      "fillGradient": null,
+      "fillImage": null,
+      "fillOpacity": "1",
+      "filters": {},
+      "canDragShape": true,
+      "canAddPoints": true,
+      "canScale": true,
+      "canRotate": true,
+      "offsetX": 0,
+      "offsetY": 0,
+      "classes": "",
+      "style": {
+        "stroke-width": "2",
+        "stroke": "black",
+        "fill": "yellow"
+      },
+      "pointOptions": {
+        "canDrag": true,
+        "canDelete": true
+      },
+      "zIndex": 1019,
+      "bounds": {
+        "left": -1,
+        "top": -1,
+        "right": -1,
+        "bottom": -1
+      },
+      "visible": false,
+      "displayMode": "default",
+      "managed": true,
+      "minWidth": -1,
+      "minHeight": -1,
+      "maxWidth": -1,
+      "maxHeight": -1,
+      "canDrag": true,
+      "prevZIndex": 1015
+    },
+    "points": [
+      {
+        "x": 100,
+        "y": 99,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1021,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 217,
+        "y": 58,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1021,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 211,
+        "y": 182,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1021,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 275,
+        "y": 136,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1021,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      }
+    ]
+  },
+  {
+    "options": {
+      "id": "shape_1",
+      "name": "Shape #1",
+      "maxPoints": -1,
+      "stroke": "rgb(0,0,0)",
+      "strokeWidth": "2",
+      "strokeLinecap": "",
+      "strokeDasharray": "",
+      "fill": "none",
+      "fillGradient": null,
+      "fillImage": null,
+      "fillOpacity": "1",
+      "filters": {},
+      "canDragShape": true,
+      "canAddPoints": true,
+      "canScale": true,
+      "canRotate": true,
+      "offsetX": 0,
+      "offsetY": 0,
+      "classes": "",
+      "style": {
+        "stroke-width": "2",
+        "stroke": "black",
+        "fill": "blue"
+      },
+      "pointOptions": {
+        "canDrag": true,
+        "canDelete": true
+      },
+      "zIndex": 1016,
+      "bounds": {
+        "left": -1,
+        "top": -1,
+        "right": -1,
+        "bottom": -1
+      },
+      "visible": false,
+      "displayMode": "default",
+      "managed": true,
+      "minWidth": -1,
+      "minHeight": -1,
+      "maxWidth": -1,
+      "maxHeight": -1,
+      "canDrag": true,
+      "prevZIndex": 1014
+    },
+    "points": [
+      {
+        "x": 0,
+        "y": 100,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1018,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 100,
+        "y": 0,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1018,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 200,
+        "y": 100,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1018,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 85,
+        "y": 137,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1018,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      }
+    ]
+  },
+  {
+    "options": {
+      "id": "shape_2",
+      "name": "Shape #2",
+      "maxPoints": -1,
+      "stroke": "rgb(0,0,0)",
+      "strokeWidth": "2",
+      "strokeLinecap": "",
+      "strokeDasharray": "",
+      "fill": "none",
+      "fillGradient": null,
+      "fillImage": null,
+      "fillOpacity": "1",
+      "filters": {},
+      "canDragShape": true,
+      "canAddPoints": true,
+      "canScale": true,
+      "canRotate": true,
+      "offsetX": 0,
+      "offsetY": 0,
+      "classes": "",
+      "style": {
+        "stroke-width": "2",
+        "stroke": "black",
+        "fill": "red"
+      },
+      "pointOptions": {
+        "canDrag": true,
+        "canDelete": true
+      },
+      "zIndex": 1017,
+      "bounds": {
+        "left": -1,
+        "top": -1,
+        "right": -1,
+        "bottom": -1
+      },
+      "visible": false,
+      "displayMode": "default",
+      "managed": true,
+      "minWidth": -1,
+      "minHeight": -1,
+      "maxWidth": -1,
+      "maxHeight": -1,
+      "canDrag": true,
+      "prevZIndex": 1012
+    },
+    "points": [
+      {
+        "x": 0,
+        "y": 100,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1019,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 100,
+        "y": 0,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1019,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 200,
+        "y": 100,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1019,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 220,
+        "y": 216,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1019,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      }
+    ]
+  },
+  {
+    "options": {
+      "id": "shape_3",
+      "name": "Shape #3",
+      "maxPoints": -1,
+      "stroke": "rgb(0,0,0)",
+      "strokeWidth": "2",
+      "strokeLinecap": "",
+      "strokeDasharray": "",
+      "fill": "none",
+      "fillGradient": null,
+      "fillImage": null,
+      "fillOpacity": "1",
+      "filters": {},
+      "canDragShape": true,
+      "canAddPoints": true,
+      "canScale": true,
+      "canRotate": true,
+      "offsetX": 0,
+      "offsetY": 0,
+      "classes": "",
+      "style": {
+        "stroke-width": "2",
+        "stroke": "black",
+        "fill": "green"
+      },
+      "pointOptions": {
+        "canDrag": true,
+        "canDelete": true
+      },
+      "zIndex": 1018,
+      "bounds": {
+        "left": -1,
+        "top": -1,
+        "right": -1,
+        "bottom": -1
+      },
+      "visible": false,
+      "displayMode": "default",
+      "managed": true,
+      "minWidth": -1,
+      "minHeight": -1,
+      "maxWidth": -1,
+      "maxHeight": -1,
+      "canDrag": true,
+      "prevZIndex": 1013
+    },
+    "points": [
+      {
+        "x": 199,
+        "y": 255,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1020,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 155,
+        "y": 121,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1020,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 289,
+        "y": 77,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1020,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      }
+    ]
+  },
+  {
+    "options": {
+      "id": "shape_5",
+      "name": "Shape #5",
+      "maxPoints": -1,
+      "stroke": "",
+      "strokeWidth": "",
+      "strokeLinecap": "",
+      "strokeDasharray": "",
+      "fill": "",
+      "fillGradient": null,
+      "fillImage": null,
+      "fillOpacity": "1",
+      "filters": {},
+      "canDragShape": true,
+      "canAddPoints": true,
+      "canScale": true,
+      "canRotate": true,
+      "offsetX": 0,
+      "offsetY": 0,
+      "classes": "",
+      "style": {
+        "stroke-width": "2",
+        "stroke": "black",
+        "fill": "#ff00ff"
+      },
+      "pointOptions": {
+        "canDrag": true,
+        "canDelete": true
+      },
+      "zIndex": 1020,
+      "bounds": {
+        "left": -1,
+        "top": -1,
+        "right": -1,
+        "bottom": -1
+      },
+      "visible": false,
+      "displayMode": "default",
+      "managed": true,
+      "minWidth": -1,
+      "minHeight": -1,
+      "maxWidth": -1,
+      "maxHeight": -1,
+      "canDrag": true,
+      "prevZIndex": 1000
+    },
+    "points": [
+      {
+        "x": 241,
+        "y": 219,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1022,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 341,
+        "y": 119,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1022,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 460,
+        "y": 213,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1022,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 410,
+        "y": 293,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1022,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 290,
+        "y": 295,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1022,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": false,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      }
+    ]
+  },
+  {
+    "options": {
+      "id": "shape_8",
+      "name": "Shape #8",
+      "maxPoints": -1,
+      "stroke": "",
+      "strokeWidth": "",
+      "strokeLinecap": "",
+      "strokeDasharray": "",
+      "fill": "",
+      "fillGradient": null,
+      "fillImage": null,
+      "fillOpacity": "1",
+      "filters": {},
+      "canDragShape": true,
+      "canAddPoints": true,
+      "canScale": true,
+      "canRotate": true,
+      "offsetX": 0,
+      "offsetY": 0,
+      "classes": "",
+      "style": {
+        "stroke-width": "2",
+        "stroke": "black",
+        "fill": "#00ffff"
+      },
+      "pointOptions": {
+        "canDrag": true,
+        "canDelete": true
+      },
+      "zIndex": 1021,
+      "bounds": {
+        "left": -1,
+        "top": -1,
+        "right": -1,
+        "bottom": -1
+      },
+      "visible": true,
+      "displayMode": "default",
+      "managed": true,
+      "minWidth": -1,
+      "minHeight": -1,
+      "maxWidth": -1,
+      "maxHeight": -1,
+      "canDrag": true,
+      "prevZIndex": 1000
+    },
+    "points": [
+      {
+        "x": 251,
+        "y": 139,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1023,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": true,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 249,
+        "y": 101,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1023,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": true,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 343,
+        "y": 96,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1023,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": true,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 342,
+        "y": 155,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1023,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": true,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 292,
+        "y": 233,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1023,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": true,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 201,
+        "y": 193,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1023,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": true,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 227,
+        "y": 139,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1023,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": true,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 244,
+        "y": 167,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1023,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": true,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 284,
+        "y": 162,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1023,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": true,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      },
+      {
+        "x": 296,
+        "y": 125,
+        "options": {
+          "id": "",
+          "width": 10,
+          "height": 10,
+          "classes": "",
+          "style": {
+            "border-width": "1px",
+            "border-style": "solid",
+            "border-color": "black",
+            "border-radius": "25px",
+            "cursor": "pointer",
+            "background-color": "red"
+          },
+          "canDrag": true,
+          "canDelete": true,
+          "zIndex": 1023,
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 955,
+            "bottom": 428
+          },
+          "moveDirections": [
+            1,
+            0,
+            2,
+            3
+          ],
+          "visible": true,
+          "hidden": false,
+          "forceDisplay": false
+        }
+      }
+    ]
+  }
+]
