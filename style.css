@@ -64,7 +64,7 @@
 }
 
 .control-sidebar {
-    overflow:scroll;
+    overflow-y:scroll;
     width:40%;
     top: 57px;
     padding:10px;
