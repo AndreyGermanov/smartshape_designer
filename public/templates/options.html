@@ -1,1 +1,88 @@
-Options
+<ul class="nav nav-tabs" id="optionsTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="general_tab" data-toggle="tab" data-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">General</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="css_tab" data-toggle="tab" data-target="#css" type="button" role="tab" aria-controls="css" aria-selected="false">CSS</button>
+    </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general" style="margin-top:10px">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-12">
+                <div class="col-2">
+                    <label for="id">ID</label>
+                </div>
+                <div class="col-10">
+                    <input class="form-control form-control-sm" id="id"/>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-12">
+                <div class="col-2">
+                    <label for="name">Name</label>
+                </div>
+                <div class="col-10">
+                    <input class="form-control form-control-sm" id="name"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-12">
+                <div class="col-2">
+                    <label for="id">Width</label>
+                </div>
+                <div class="col-10">
+                    <input class="form-control form-control-sm" id="width" type="number"/>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-12">
+                <div class="col-2">
+                    <label for="name">Height</label>
+                </div>
+                <div class="col-10">
+                    <input class="form-control form-control-sm" id="height" type="number"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-12">
+                <div class="col-10">
+                    <label for="id">Min. Width</label>
+                </div>
+                <div class="col-10">
+                    <input class="form-control form-control-sm" id="minWidth" type="number"/>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-12">
+                <div class="col-10">
+                    <label for="name">Min. Height</label>
+                </div>
+                <div class="col-10">
+                    <input class="form-control form-control-sm" id="minHeight" type="number"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-12">
+                <div class="col-10">
+                    <label for="id">Max. Width</label>
+                </div>
+                <div class="col-10">
+                    <input class="form-control form-control-sm" id="maxWidth" type="number"/>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-12">
+                <div class="col-10">
+                    <label for="name">Max. Height</label>
+                </div>
+                <div class="col-10">
+                    <input class="form-control form-control-sm" id="maxHeight" type="number"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="tab-pane fade show" id="css" role="tabpanel" aria-labelledby="css">
+        <textarea id="cssEditor"></textarea>
+    </div>
+</div>
