@@ -23,7 +23,7 @@
     position:relative;;
 }
 
-.shape_row td:hover {
+.shape_row:hover {
     background-color: #444444;
     cursor:pointer;
 }
@@ -33,22 +33,26 @@
     cursor:pointer;
 }
 
-.shape_row td span {
+.shape_row {
+    padding: 20px;
+}
+.shape_row span {
     position:absolute;
-    color:#ffff00;
-    right:-5px;
-    top:0px;
+    color:#ff0000;
+    right:5px;
+    top:5px;
     font-size:10px;
     cursor:pointer;
     transform: rotate(45deg);
 }
-.shape_row td div {
+.shape_row div {
     background-color:white;
     height:100%;
     width:100%;
     padding:15px;
     border-radius: 15px;
     color: black;
+    overflow: clip;
 }
 
 .center {
@@ -56,4 +60,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.control-sidebar {
+    overflow:scroll;
+    width:40%;
+    top: 57px;
+    padding:10px;
 }

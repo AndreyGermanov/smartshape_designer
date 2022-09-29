@@ -22,6 +22,7 @@ export default function Editor() {
     this.setEventListeners = () => {
         this.element.querySelector("#newBtn").addEventListener("click",this.addShape);
         EventsManager.subscribe(Events.SELECT_SHAPE,this.selectShape)
+        EventsManager.subscribe("destroy", this.onShapeDestroyed)
     }
 
     this.addShape = () => {
@@ -42,12 +43,16 @@ export default function Editor() {
 
     this.selectShape = (event) => {
         this.selectedShape = event.target;
-        SmartShapeManager.shapes.forEach(shape => {
-            if (shape !== this.selectedShape) {
-                shape.hide();
-            }
-        })
+        SmartShapeManager.getShapes().filter(shape=>shape !== this.selectedShape).forEach(shape=>shape.hide());
         this.selectedShape.show();
+        SmartShapeManager.activateShape(this.selectedShape);
         this.setDisplayMode();
+    }
+
+    this.onShapeDestroyed = (event) => {
+        if (event.target === this.selectedShape) {
+            this.selectedShape = null;
+            this.setDisplayMode();
+        }
     }
 }
