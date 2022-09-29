@@ -2,22 +2,23 @@
     <span class="brand-text font-weight-light">SmartShape Studio</span>
 </span>
 <div class="sidebar" id="shapes_panel">
-    <div class="brand-text">
+    <div class="user-panel">
         <button type="button" class="btn btn-link btn-sm" id="panelAddBtn" title="Add new shape">
             <span class="fa fa-plus"></span>
         </button>
-        <table>
-            <tbody>
-                <tr class="shape_row" style="display:none">
-                    <td>
-                        <div class="center"></div>
-                        <span class="fa fa-plus" title="Delete"></span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <button type="button" class="btn btn-link btn-sm" id="panelLoadBtn" title="Load collection">
+            <span class="fa fa-upload"></span>
+        </button>
+        <button type="button" class="btn btn-link btn-sm" id="panelSaveBtn" title="Save collection">
+            <span class="fa fa-download"></span>
+        </button>
     </div>
-
+    <div class="user-panel shape_row" style="display:none">
+        <div class="center">
+            <img/>
+        </div>
+        <span class="fa fa-plus" title="Delete"></span>
+    </div>
 </div>
 
 
