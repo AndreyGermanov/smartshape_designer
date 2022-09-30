@@ -81,3 +81,7 @@
     height: 300px;
     overflow-y: scroll;
 }
+
+.control-sidebar-dark a {
+    color:#007bff;
+}

@@ -10,7 +10,7 @@ export default function ShapesPanel() {
     this.element = document.querySelector("#shapes_panel");
     this.init = async() => {
         this.setEventListeners();
-        SmartShapeManager.fromJSON(document.querySelector("#shape_container"),JSON.stringify(sampleCollection));
+        SmartShapeManager.fromJSON(document.querySelector("#shape_container"),sampleCollection);
         setTimeout(async() => {
             for (let shape of SmartShapeManager.getShapes()) {
                 await this.updateShape(shape);
