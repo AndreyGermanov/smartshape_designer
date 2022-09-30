@@ -3,7 +3,7 @@ Visual design tool for SmartShape shapes and libraries of shapes. Using this too
 
 <p align="center">
 
-![Studio](https://shapes.germanov.dev/preview.png)
+![Studio](public/preview.png)
 
 </p>
 
