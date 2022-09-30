@@ -33,7 +33,7 @@ import collectionJson from "./collection.json";
 const div = document.querySelector("#app");
 
 // Read shapes from file and put to container
-SmartShapeManager.fromJSON(collectionJson);
+SmartShapeManager.fromJSON(div,collectionJson);
 
 // Get all imported shapes as an array
 const shapes = SmartShapeManager.getShapes();
