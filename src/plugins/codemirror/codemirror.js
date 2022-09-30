@@ -9866,7 +9866,7 @@
   addLegacyProps(CodeMirror);
 
   CodeMirror.version = "5.65.9";
-
+  window.CodeMirror = CodeMirror;
   return CodeMirror;
 
 })));
