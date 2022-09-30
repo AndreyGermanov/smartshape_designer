@@ -71,8 +71,9 @@ export default function ShapesPanel() {
             pointOptions:{
                 canDrag:true,
                 canDelete:true
-            }
-        },[[0,100],[100,0],[200,100]]);
+            },
+            forceCreateEvent:true
+        });
     }
 
     this.addShapeCell = (shape) => {
@@ -111,6 +112,7 @@ export default function ShapesPanel() {
             node.classList.remove("selected");
         })
         this.element.querySelector("#row_"+shape.guid).classList.add("selected");
+        this.element.scrollTop = this.element.querySelector("#row_"+shape.guid).offsetTop;
     }
 
     this.onShapeRowClick = (event) => {
@@ -187,6 +189,10 @@ export default function ShapesPanel() {
                 SmartShapeManager.fromJSON(document.querySelector("#shape_container"),event.target.result);
                 if (SmartShapeManager.getShapes().length === 0) {
                     alert("Could not load collection");
+                } else {
+                    setTimeout(() => {
+                        EventsManager.emit(Events.SELECT_SHAPE,SmartShapeManager.getShapes()[0]);
+                    },100)
                 }
             }
             reader.readAsText(file);

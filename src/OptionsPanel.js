@@ -54,7 +54,8 @@ export default function OptionsPanel() {
             }
         })
         this.element.querySelectorAll("input").forEach(item => {
-            item.addEventListener("keyup",this.applyOption)
+            item.addEventListener("keyup",this.applyOption);
+            item.addEventListener("change",this.applyOption);
         })
         EventsManager.subscribe([
             ShapeEvents.SHAPE_MOVE,

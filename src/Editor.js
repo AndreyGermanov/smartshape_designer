@@ -1,5 +1,5 @@
 import {Events} from "./events.js";
-import {EventsManager,SmartShape,SmartShapeManager} from "./smart_shape/src/index.js";
+import {EventsManager,SmartShape,SmartShapeManager,SmartShapeDisplayMode} from "./smart_shape/src/index.js";
 export default function Editor() {
     this.selectedShape = null;
     this.element = document.querySelector("#editor");
@@ -37,8 +37,9 @@ export default function Editor() {
             pointOptions:{
                 canDrag:true,
                 canDelete:true
-            }
-        },[[0,100],[100,0],[200,100]]);
+            },
+            forceCreateEvent:true,
+        });
         EventsManager.emit(Events.ADD_SHAPE,shape);
     }
 
@@ -46,7 +47,7 @@ export default function Editor() {
         this.selectedShape = event.target;
         SmartShapeManager.getShapes().filter(shape=>shape !== this.selectedShape).forEach(shape=>shape.hide());
         this.selectedShape.show();
-        SmartShapeManager.activateShape(this.selectedShape);
+        SmartShapeManager.activateShape(this.selectedShape,SmartShapeDisplayMode.SELECTED);
         this.setDisplayMode();
     }
 

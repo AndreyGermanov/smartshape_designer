@@ -36,6 +36,8 @@
 
 .shape_row {
     padding: 20px;
+    min-height: 131px;
+
 }
 .shape_row span {
     position:absolute;
@@ -49,6 +51,7 @@
 .shape_row div {
     background-color:white;
     height:100%;
+    min-height: 91px;
     width:100%;
     padding:15px;
     border-radius: 15px;
