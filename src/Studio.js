@@ -13,7 +13,10 @@ export default function Studio() {
         this.shapesPanel.init();
         this.optionsPanel.init();
         this.setEventListeners();
-        this.onWindowResize();
+        setTimeout(() => {
+            this.onWindowResize();
+        },100);
+
     }
 
     this.setEventListeners = () => {
