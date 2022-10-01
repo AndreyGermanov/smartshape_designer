@@ -17,7 +17,7 @@ Using the editor, you can add shapes, design them, set their options, including 
 
 Finally, created collection of shapes can be loaded to the code of your project, that uses SmartShape. SmartShape provides an extended API, which makes vector figures interactive: you can drag/resize/rotate these figures and communicate with them using event subsystem.
 
-For example, if you designed a collection of shapes and saved them as a `collection.json`, you can later load them to you SmartShape project by `SmartShapeManger` object:
+For example, if you designed a collection of shapes and saved them as a `collection.json`, you can later load them to you SmartShape project by `SmartShapeManager` object:
 
 ```html
 <div id="app" style="width:100%;height:600px"></div>
@@ -50,6 +50,10 @@ const shape2 = SmartShapeManager.findShapeById("shape2");
 
 // Move shape to other place of the screen
 shape2.moveTo(200,100)
+
+// Display shapes
+shape1.show();
+shape2.show();
 
 // and so on ...
 ```
