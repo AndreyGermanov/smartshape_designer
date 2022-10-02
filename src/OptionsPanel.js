@@ -1,4 +1,4 @@
-import {EventsManager,ShapeEvents} from "./smart_shape/src/index.js";
+import {EventsManager,ShapeEvents} from "smart_shape";
 import "./plugins/codemirror/codemirror.css";
 import "./plugins/codemirror/theme/monokai.css";
 import "./plugins/codemirror/codemirror.js";

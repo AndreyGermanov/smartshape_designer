@@ -1,5 +1,5 @@
 import {Events} from "./events.js";
-import {EventsManager,SmartShape,SmartShapeManager,SmartShapeDisplayMode} from "./smart_shape/src/index.js";
+import {EventsManager,SmartShape,SmartShapeManager,SmartShapeDisplayMode} from "smart_shape";
 export default function Editor() {
     this.selectedShape = null;
     this.element = document.querySelector("#editor");

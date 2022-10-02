@@ -1,4 +1,4 @@
-import {EventsManager, SmartShape, SmartShapeManager,ShapeEvents} from "./smart_shape/src/index.js";
+import {EventsManager, SmartShape, SmartShapeManager,ShapeEvents} from "smart_shape";
 import {Events} from "./events.js";
 import sampleCollection from "./examples/example.json";
 
