@@ -13,6 +13,16 @@ export const injectHTML = async(filePath,elem) => {
             return;
         }
         elem.innerHTML = await response.text();
+        elem.querySelectorAll("script").forEach(script => {
+            const newScript = document.createElement("script");
+            Array.from(script.attributes).forEach(attr =>
+                newScript.setAttribute(attr.name, attr.value)
+            );
+            newScript.appendChild(
+                document.createTextNode(script.innerHTML)
+            )
+            script.parentNode.replaceChild(newScript, script);
+        })
     } catch (err) {
         console.error(err.message);
     }
@@ -29,5 +39,5 @@ export const injectAll = async () => {
     const elems = document.querySelectorAll("[include]");
     for (let elem of elems) {
         await injectHTML(elem.getAttribute("include"),elem);
-    };
+    }
 }
