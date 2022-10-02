@@ -31,6 +31,7 @@
   },
   "homepage": "https://github.com/AndreyGermanov/smartshape_designer#readme",
   "dependencies": {
-    "admin-lte": "^3.2.0"
+    "admin-lte": "^3.2.0",
+    "smart_shape": "^1.0.7"
   }
 }
