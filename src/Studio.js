@@ -9,7 +9,7 @@ export default function Studio() {
 
 
     this.init = () => {
-        this.editor.init();
+        this.editor.init(this);
         this.shapesPanel.init();
         this.optionsPanel.init();
         this.setEventListeners();
