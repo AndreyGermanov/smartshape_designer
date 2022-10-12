@@ -32,6 +32,7 @@
   "homepage": "https://github.com/AndreyGermanov/smartshape_designer#readme",
   "dependencies": {
     "admin-lte": "^3.2.0",
+    "simple_js_menu": "^1.0.2",
     "smart_shape": "^1.0.7"
   }
 }

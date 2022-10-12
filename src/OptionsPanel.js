@@ -1,4 +1,4 @@
-import {EventsManager,ShapeEvents} from "smart_shape";
+import {EventsManager,ShapeEvents} from "./smart_shape/src/index.js";
 import "./plugins/codemirror/codemirror.css";
 import "./plugins/codemirror/theme/monokai.css";
 import "./plugins/codemirror/codemirror.js";
@@ -41,7 +41,7 @@ export default function OptionsPanel() {
                 EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS,this.selectedShape);
             })
         },100)
-        EventsManager.subscribe(Events.SELECT_SHAPE, (event) => {
+        EventsManager.subscribe([Events.SELECT_SHAPE,ShapeEvents.SHAPE_ACTIVATED], (event) => {
             this.selectedShape = event.target;
             if (this.selectedShape) {
                 document.getElementById("optionsCard").style.display = '';

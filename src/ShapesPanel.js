@@ -1,6 +1,6 @@
-import {EventsManager, SmartShape, SmartShapeManager,ShapeEvents} from "smart_shape";
+import {EventsManager, SmartShape, SmartShapeManager,ShapeEvents} from "./smart_shape/src/index.js";
 import {Events} from "./events.js";
-import sampleCollection from "./examples/example.json";
+import {applyAspectRatio} from "./utils/geometry.js";
 
 export default function ShapesPanel() {
 
@@ -10,12 +10,10 @@ export default function ShapesPanel() {
     this.element = document.querySelector("#shapes_panel");
     this.init = async() => {
         this.setEventListeners();
-        SmartShapeManager.fromJSON(document.querySelector("#shape_container"),sampleCollection);
         setTimeout(async() => {
             for (let shape of SmartShapeManager.getShapes()) {
                 await this.updateShape(shape);
             }
-            EventsManager.emit(Events.SELECT_SHAPE,SmartShapeManager.getShapes()[0]);
         },100)
     }
 
@@ -26,6 +24,7 @@ export default function ShapesPanel() {
                 event.target.options &&
                 event.target.options.id &&
                 event.target.options.id.search("_clone") === -1 &&
+                event.target.options.id.search("_child") === -1 &&
                 event.target.options.id.search("_resizebox") === -1 &&
                 event.target.options.id.search("_rotatebox") === -1 &&
                 !event.target.getParent()
@@ -47,17 +46,30 @@ export default function ShapesPanel() {
             ShapeEvents.POINT_ADDED,
             ShapeEvents.POINT_DESTROYED
         ],async(event) => {
-            if (event.target.options.id.search("_clone") === -1 &&
-                event.target.points &&
+            if (event.target.points &&
                 event.target.options.id.search("_resizebox") === -1 &&
                 event.target.options.id.search("_rotatebox") === -1 &&
                 event.target.points.length) {
-                await this.updateShape(event.target);
+                const parent = event.target.getParent();
+                if (parent) {
+                    await this.updateShape(parent);
+                } else {
+                    await this.updateShape(event.target);
+                }
+
             }
         });
         EventsManager.subscribe(Events.CHANGE_SHAPE_OPTIONS,async(event) => {
-            await this.updateShape(event.target);
+            const parent = event.target.getParent();
+            if (parent) {
+                await this.updateShape(parent);
+            } else {
+                await this.updateShape(event.target);
+            }
         });
+        EventsManager.subscribe(Events.REPLACE_SHAPE, (event) => {
+            this.replaceShapeCell(event.target,event.oldShape);
+        })
     }
 
     this.addShape = () => {
@@ -85,8 +97,18 @@ export default function ShapesPanel() {
         deleteBtn.addEventListener("click",this.onDeleteShapeClick);
         row.style.display = '';
         this.element.querySelector(".shape_row").parentNode.appendChild(row);
+        shape.setOptions({groupChildShapes:false});
         this.updateShape(shape)
         EventsManager.emit(Events.SELECT_SHAPE,shape);
+    }
+
+    this.replaceShapeCell = (shape,oldShape) => {
+        const row = this.element.querySelector("#row_"+oldShape.guid);
+        if (!row) {
+            return;
+        }
+        row.id = "row_"+shape.guid;
+        this.updateShape(shape);
     }
 
     this.updateShape = async (shape) => {
@@ -94,17 +116,73 @@ export default function ShapesPanel() {
         if (!row) {
             return;
         }
-        const div = row.querySelector("div");
         const img = row.querySelector("img");
-        const clone = shape.clone();
-        clone.scaleTo(null,60);
-        clone.redraw();
-        const pos = clone.getPosition(true);
-        img.style.width = pos.width + "px";
-        img.style.height = pos.height + "px";
-        clone.hide();
-        img.src = await clone.toPng();
-        clone.destroy();
+        shape.calcPosition();
+        const pos = shape.getPosition(shape.options.groupChildShapes);
+        const [width,height] = applyAspectRatio(null, 60, pos.width, pos.height);
+        img.style.width = width + "px";
+        img.style.height = height + "px";
+        img.src = await shape.toPng("dataurl");
+        this.setupShapeContextMenu(shape);
+    }
+
+    this.setupShapeContextMenu = (shape) => {
+        if (shape.contextMenu && !shape.contextMenuUpdated) {
+            shape.contextMenu.on("show",() => {
+                const destroyId = shape.contextMenu.items.findIndex(item => item.id === "i"+shape.guid+"_destroy");
+                let img = null;
+                if (destroyId !== -1) {
+                    img = shape.contextMenu.items[destroyId].image;
+                    shape.contextMenu.items.splice(destroyId,1)
+                }
+                const deleteId = shape.contextMenu.items.findIndex(item => item.id === "i"+shape.guid+"_delete");
+                if (deleteId === -1) {
+                    shape.contextMenu.addItem("i"+shape.guid+"_delete","Destroy",img);
+                }
+            })
+            shape.contextMenu.on("click", (event) => {
+                if (event.itemId === "i" + shape.guid + "_clone") {
+                    setTimeout(() => {
+                        const parent = shape.getRootParent();
+                        if (parent) {
+                            parent.addChild(SmartShapeManager.activeShape);
+                        } else {
+                            shape.addChild(SmartShapeManager.activeShape);
+                        }
+                        if (shape.contextMenu) {
+                            this.setupShapeContextMenu(shape);
+                            shape.displayGroupItems();
+                        }
+                        if (SmartShapeManager.activeShape.contextMenu) {
+                            this.setupShapeContextMenu(SmartShapeManager.activeShape);
+                            SmartShapeManager.activeShape.displayGroupItems();
+                        }
+                    },100)
+                } else if (event.itemId === "i" + shape.guid + "_delete") {
+                    this.onDestroyShape(shape);
+                }
+            })
+            shape.contextMenuUpdated = true;
+        }
+    }
+
+    this.onDestroyShape = (shape) => {
+        const parent = shape.getRootParent();
+        if (parent && parent.options.groupChildShapes) {
+            parent.destroy();
+            return;
+        }
+        const children = shape.getChildren(true);
+        if (!children.length || shape.options.groupChildShapes) {
+            shape.destroy();
+            return;
+        }
+        const child = children.shift();
+        shape.removeAllChildren(true);
+        children.forEach(item => child.addChild(item));
+        EventsManager.emit(Events.REPLACE_SHAPE,child,{oldShape:shape});
+        EventsManager.emit(Events.SELECT_SHAPE,child);
+        shape.destroy();
     }
 
     this.selectShape = (shape) => {
