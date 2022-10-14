@@ -19,7 +19,7 @@ export default function Editor() {
     this.setupMenu = () => {
         this.menu =Menus.create([{id:"add_shape",title:"Add shape",image:Add}],
             document.getElementById("editorMenuBtn"),'click');
-        this.menu.on("show", (event) => {
+        this.menu.on("show", () => {
             if (!this.selectedShape || this.selectedShape.points.length < 3) {
                 setTimeout(() => {
                     this.menu.hide();
@@ -85,8 +85,9 @@ export default function Editor() {
 
     this.selectShape = (event) => {
         this.selectedShape = event.target;
-        SmartShapeManager.getShapes().filter(shape=>shape !== this.selectedShape).forEach(shape=>shape.hide());
+        SmartShapeManager.getShapes().forEach(shape=>shape.hide())
         this.selectedShape.show();
+        this.selectedShape.getChildren(true).forEach(shape=>shape.show())
         SmartShapeManager.activateShape(this.selectedShape,SmartShapeDisplayMode.SELECTED);
         this.setDisplayMode();
     }

@@ -73,7 +73,7 @@
     padding:10px;
 }
 
-.tab-pane .row {
+.tab-pane .row, #fillTypeGradient > div, #fillTypeImage > div {
     margin-top:10px
 }
 
@@ -85,3 +85,20 @@
 .control-sidebar-dark a {
     color:#007bff;
 }
+
+.nav-tabs .nav-link .active {
+    background-color: white;
+    color: black;
+}
+
+.nav-tabs .nav-link {
+    background-color: #212529;
+    color: white;
+}
+
+#fillGradientTable td > div {
+    display:flex;
+    flex-direction:row;
+    align-items: center;
+}
+

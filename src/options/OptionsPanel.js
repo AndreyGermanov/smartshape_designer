@@ -1,9 +1,15 @@
-import {EventsManager,ShapeEvents} from "./smart_shape/src/index.js";
-import "./plugins/codemirror/codemirror.css";
-import "./plugins/codemirror/theme/monokai.css";
-import "./plugins/codemirror/codemirror.js";
-import "./plugins/codemirror/mode/css.js";
-import {Events} from "./events.js";
+import {EventsManager,ShapeEvents} from "../smart_shape/src/index.js";
+import "../plugins/codemirror/codemirror.css";
+import "../plugins/codemirror/theme/monokai.css";
+import "../plugins/codemirror/codemirror.js";
+import "../plugins/codemirror/mode/css.js";
+import "../plugins/colorpicker/index.min.js"
+import "../plugins/colorpicker/index.css";
+import FillTab from "./FillTab.js";
+import StrokeTab from "./StrokeTab.js";
+import CssTab from "./CssTab.js";
+import {Events} from "../events.js";
+
 export default function OptionsPanel() {
 
     this.options = {};
@@ -12,35 +18,31 @@ export default function OptionsPanel() {
 
     this.selectedShape = null;
 
+    this.fillTab = null;
+    this.strokeTab = null;
+
     this.init = () => {
         this.setEventListeners();
-        this.cssEditor = CodeMirror.fromTextArea(document.getElementById("cssEditor"), {
-            mode: "css",
-            theme: "monokai"
-        });
+        new CssTab(this).init();
+        this.fillTab = new FillTab(this).init();
+        this.strokeTab = new StrokeTab(this).init();
     }
 
     this.setEventListeners = () => {
         this.element.querySelectorAll(".nav-link").forEach(item => {
             item.addEventListener("click", (event) => {
-                this.element.querySelectorAll(".nav-link").forEach(item => {
-                    item.classList.remove("active");
+                this.element.querySelectorAll(".nav-link").forEach(elem => {
+                    elem.classList.remove("active");
                 });
                 event.target.classList.add("active");
-                this.element.querySelectorAll(".tab-pane").forEach(item => {
-                    item.classList.remove("active");
+                this.element.querySelectorAll(".tab-pane").forEach(elem => {
+                    elem.classList.remove("active");
                 });
                 this.element.querySelector("#"+event.target.id.replace("_tab","")).classList.add("active");
                 this.cssEditor.refresh();
 
             })
         })
-        setTimeout(() => {
-            this.cssEditor.on("change", () => {
-                this.selectedShape.options.style = this.stringToStyles(this.cssEditor.getValue());
-                EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS,this.selectedShape);
-            })
-        },100)
         EventsManager.subscribe([Events.SELECT_SHAPE,ShapeEvents.SHAPE_ACTIVATED], (event) => {
             this.selectedShape = event.target;
             if (this.selectedShape) {
@@ -53,7 +55,7 @@ export default function OptionsPanel() {
                 document.getElementById("optionsCard").style.display = 'none';
             }
         })
-        this.element.querySelectorAll("input").forEach(item => {
+        this.element.querySelectorAll("#general input").forEach(item => {
             item.addEventListener("keyup",this.applyOption);
             item.addEventListener("change",this.applyOption);
         })
@@ -89,6 +91,8 @@ export default function OptionsPanel() {
         this.element.querySelector("#maxWidth").setAttribute("value",shape.options.maxWidth);
         this.element.querySelector("#maxHeight").setAttribute("value",shape.options.maxHeight);
         this.cssEditor.getDoc().setValue(this.stylesToString(shape.options.style));
+        this.fillTab.loadFillOptions();
+        this.strokeTab.loadStrokeOptions();
     }
 
     this.stylesToString = (stylesObj) => {
@@ -105,8 +109,7 @@ export default function OptionsPanel() {
         strings.forEach(string => {
             const parts = string.split(":")
             const name = parts.shift();
-            const value = parts.join(":").replace(";","");
-            result[name] = value;
+            result[name] = parts.join(":").replace(";","");
         })
         return result;
     }

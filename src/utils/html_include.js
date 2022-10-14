@@ -36,8 +36,12 @@ export const injectHTML = async(filePath,elem) => {
  * each div with the "include" attribute
  */
 export const injectAll = async () => {
-    const elems = document.querySelectorAll("[include]");
-    for (let elem of elems) {
-        await injectHTML(elem.getAttribute("include"),elem);
+    let elems = document.querySelectorAll("[include]");
+    while (elems.length>0) {
+        for (let elem of elems) {
+            await injectHTML(elem.getAttribute("include"), elem);
+            elem.removeAttribute("include");
+        }
+        elems = document.querySelectorAll("[include]");
     }
 }

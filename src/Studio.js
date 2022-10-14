@@ -1,6 +1,6 @@
 import Editor from "./Editor.js";
 import ShapesPanel from "./ShapesPanel.js";
-import OptionsPanel from "./OptionsPanel.js";
+import OptionsPanel from "./options/OptionsPanel.js";
 export default function Studio() {
 
     this.editor = new Editor();
