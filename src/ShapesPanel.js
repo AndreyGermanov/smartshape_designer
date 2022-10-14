@@ -86,7 +86,7 @@ export default function ShapesPanel() {
             },
             moveToTop: false,
             forceCreateEvent:true
-        }[[0,100],[100,0],[200,100]]);
+        },[[0,100],[100,0],[200,100]]);
     }
 
     this.addShapeCell = (shape) => {
