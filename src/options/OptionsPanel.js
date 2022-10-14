@@ -3,7 +3,7 @@ import "../plugins/codemirror/codemirror.css";
 import "../plugins/codemirror/theme/monokai.css";
 import "../plugins/codemirror/codemirror.js";
 import "../plugins/codemirror/mode/css.js";
-import "../plugins/colorpicker/index.min.js"
+import "../plugins/colorpicker/index.js"
 import "../plugins/colorpicker/index.css";
 import FillTab from "./FillTab.js";
 import StrokeTab from "./StrokeTab.js";
