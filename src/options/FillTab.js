@@ -8,6 +8,7 @@ export default function FillTab (panel) {
     this.fillColorInput =  this.panel.element.querySelector("#fillTypeColorInput");
     this.fillColorColumn = this.panel.element.querySelector("#fillTypeColor");
     this.fillTypeDropDown = this.panel.element.querySelector("#fillType")
+    this.fillGradientType = this.panel.element.querySelector("#fillGradientType");
     this.fillGradientAngle = this.panel.element.querySelector("#fillGradientAngle");
     this.fillGradientTable = this.panel.element.querySelector("#fillGradientTable");
     this.fillTypeGradient = this.panel.element.querySelector("#fillTypeGradient");
@@ -29,6 +30,7 @@ export default function FillTab (panel) {
         this.fillTypeDropDown.addEventListener('change',this.onFillTypeChange);
         this.fillColorInput.addEventListener('change', this.onFillColorChange);
         this.fillColorInput.addEventListener('keyup', this.onFillColorChange);
+        this.fillGradientType.addEventListener('change',this.updateGradientData);
         this.fillGradientAngle.addEventListener('change',this.onFillGradientAngleChange);
         this.fillGradientAngle.addEventListener('keyup',this.onFillGradientAngleChange);
         this.fillGradientAddBtn.addEventListener("click",() => {
@@ -113,6 +115,9 @@ export default function FillTab (panel) {
             .filter(item => item.style.display !== "none" && !item.querySelectorAll("th").length)
             .forEach(item => item.parentNode.removeChild(item));
         this.fillGradientAngle.value = 0;
+        this.fillGradientType.value = "linear";
+        this.fillGradientType.querySelector("option").removeAttribute("selected");
+        this.fillGradientType.querySelector("option[value='linear']").setAttribute("selected", "true");
         this.fillColorInput.value = "#000000ff";
         if (this.panel.selectedShape.options.fill.toString().length && this.panel.selectedShape.options.fill !== "none") {
             this.fillColorColumn.style.display = '';
@@ -134,8 +139,9 @@ export default function FillTab (panel) {
             this.fillTypeDropDown.value = "gradient";
             this.fillTypeGradient.style.display = '';
             this.fillGradientAngle.value = this.parseGradientAngle()
-            this.fillTypeDropDown.querySelector("option").removeAttribute("selected");
-            this.fillTypeDropDown.querySelector("option[value='gradient']").setAttribute("selected","true");
+            this.fillGradientType.value = this.panel.selectedShape.options.fillGradient.type;
+            this.fillGradientType.querySelector("option").removeAttribute("selected");
+            this.fillGradientType.querySelector("option[value='"+this.fillGradientType.value+"']").setAttribute("selected","true");
             this.createGradientTable();
         } else {
             this.fillTypeDropDown.value = "none";
@@ -241,7 +247,7 @@ export default function FillTab (panel) {
     this.updateGradientData = () => {
         const angle = this.fillGradientAngle.value ? this.fillGradientAngle.value : 0;
         const fillGradient = {
-            type: "linear",
+            type: this.fillGradientType.value,
             gradientTransform: "rotate("+angle+")",
             steps: []
         }

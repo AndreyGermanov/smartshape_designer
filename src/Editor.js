@@ -1,7 +1,8 @@
 import {Events} from "./events.js";
 import {EventsManager,SmartShape,SmartShapeManager,SmartShapeDisplayMode} from "./smart_shape/src/index.js";
 import {Menus} from "../context_menu/src/index.js";
-import Add from "./assets/list-add.png";
+import Triangle from "./assets/triangle.png";
+import Square from "./assets/square.png";
 
 export default function Editor() {
     this.selectedShape = null;
@@ -17,7 +18,10 @@ export default function Editor() {
     }
 
     this.setupMenu = () => {
-        this.menu =Menus.create([{id:"add_shape",title:"Add shape",image:Add}],
+        this.menu =Menus.create([
+            {id:"add_triangle",title:"Add triangle",image:Triangle},
+            {id:"add_square",title:"Add square",image:Square}
+        ],
             document.getElementById("editorMenuBtn"),'click');
         this.menu.on("show", () => {
             if (!this.selectedShape || this.selectedShape.points.length < 3) {
@@ -27,24 +31,33 @@ export default function Editor() {
             }
         })
         this.menu.on("click", (event) => {
-            if (event.itemId === "add_shape") {
-                const childCount = this.selectedShape.getChildren(true).length;
-                const shape = new SmartShape().init(this.selectedShape.root,{
-                    id:this.selectedShape.options.id+"_child"+childCount,
-                        name: "Shape #" + SmartShapeManager.shapes.length,
-                        canAddPoints: true,
-                        canDrag: true,
-                        canScale: true,
-                        canRotate: true,
-                        pointOptions:{
-                            canDrag:true,
-                            canDelete:true
-                        },
-                    },
-                    [[0,100],[100,0],[200,100]]);
+            const childCount = SmartShapeManager.getShapes().length;
+            const shapeOptions = {
+                id:this.selectedShape.options.id+"_child"+childCount,
+                name: "Shape #" + SmartShapeManager.shapes.length,
+                canAddPoints: true,
+                canDrag: true,
+                canScale: true,
+                canRotate: true,
+                pointOptions:{
+                    canDrag:true,
+                    canDelete:true
+                },
+                moveToTop: false
+            };
+            if (event.itemId === "add_triangle") {
+                const shape = new SmartShape().init(this.selectedShape.root,shapeOptions,
+                    [[0,100],[50,0],[100,100]]);
                 this.selectedShape.addChild(shape);
                 SmartShapeManager.activateShape(shape);
                 this.studio.shapesPanel.setupShapeContextMenu(shape);
+            } else if (event.itemId === "add_square") {
+                const shape = new SmartShape().init(this.selectedShape.root,shapeOptions,
+                    [[0,100],[0,0],[100,0],[100,100]]);
+                this.selectedShape.addChild(shape);
+                SmartShapeManager.activateShape(shape);
+                this.studio.shapesPanel.setupShapeContextMenu(shape);
+
             }
         })
     }
@@ -79,7 +92,8 @@ export default function Editor() {
                 canDelete:true
             },
             forceCreateEvent:true,
-        });
+            moveToTop: false,
+        },[[0,100],[100,0],[200,100]]);
         EventsManager.emit(Events.ADD_SHAPE,shape);
     }
 

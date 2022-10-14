@@ -21,11 +21,26 @@
         </div>
     </div>
     <div class="col-md-12 col-sm-12 col-12" id="fillTypeGradient">
-        <div class="col-2">
-            <label for="fillGradientAngle">Rotate</label>
-        </div>
-        <div class="col-12">
-            <input class="form-control form-control-sm" type="number" id="fillGradientAngle"/>
+        <div class="row">
+            <div class="col-md-6 col-sm-12 col-12">
+                <div class="col-12">
+                    <label for="fillGradientType">Gradient Type</label>
+                </div>
+                <div class="col-12">
+                    <select class="form-control form-control-sm" id="fillGradientType">
+                        <option value="linear">Linear</option>
+                        <option value="radial"l>Radial</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12 col-12">
+                <div class="col-12">
+                    <label for="fillGradientAngle">Rotate Angle</label>
+                </div>
+                <div class="col-12">
+                    <input class="form-control form-control-sm" type="number" id="fillGradientAngle"/>
+                </div>
+            </div>
         </div>
         <div class="col-12">
             <table class="table table-bordered table-striped" id="fillGradientTable">

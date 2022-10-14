@@ -13,6 +13,7 @@ export default function StrokeTab (panel) {
     this.strokeDasharray = this.panel.element.querySelector("#strokeDasharray");
 
     this.init = () => {
+        this.strokeColorPicker.noAlpha = true;
         this.setFillEventListeners();
         return this;
     }
@@ -29,7 +30,7 @@ export default function StrokeTab (panel) {
     }
 
     this.onStrokeColorPickerChange = (red,green,blue,alpha) => {
-        const hexString = "#"+rgba2hex(red,green,blue,alpha);
+        const hexString = "#"+rgba2hex(red,green,blue,1).toString().substring(0,6);
         if (hexString === this.strokeColor.value) {
             return
         }
@@ -44,21 +45,22 @@ export default function StrokeTab (panel) {
     }
 
     this.onStrokeColorChange = (event) => {
-        const rgba = hex2rgba(event.target.value);
+        const rgba = hex2rgba(event.target.value+"ff");
         if (!rgba) {
             return
         }
+        rgba.push(1);
         const brightness = getColorBrightness(...rgba);
-        this.strokeColor.style.backgroundColor = event.target.value;
+        this.strokeColor.style.backgroundColor = event.target.value.substring(0,8);
         this.strokeColor.style.color = brightness > 160 ? 'black' : 'white';
         this.strokeColorPicker.set(...rgba);
-        this.panel.selectedShape.setOptions({stroke:event.target.value});
+        this.panel.selectedShape.setOptions({stroke:event.target.value.substring(0,8)});
         EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS, this.panel.selectedShape);
     }
 
     this.loadStrokeOptions = () => {
         const options = this.panel.selectedShape.options;
-        this.strokeColor.value = options.stroke || "#000000ff";
+        this.strokeColor.value = options.stroke || "#000000";
         this.strokeWidth.value = options.strokeWidth;
         this.strokeDasharray.value = options.strokeDasharray;
         this.strokeLinecap.value = options.strokeLinecap || "square";
@@ -73,7 +75,6 @@ export default function StrokeTab (panel) {
     }
 
     this.onStrokeWidthChange = (event) => {
-        console.log(event.target.value);
         this.panel.selectedShape.setOptions({strokeWidth:event.target.value});
         EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS,this.panel.selectedShape);
     }
