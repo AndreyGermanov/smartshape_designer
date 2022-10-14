@@ -89,8 +89,12 @@ export default function ShapesPanel() {
     }
 
     this.addShapeCell = (shape) => {
+        const id = "row_"+shape.guid;
+        if (this.element.querySelector("#"+id)) {
+            return
+        }
         const row = this.element.querySelector(".shape_row").cloneNode(true);
-        row.id = "row_"+shape.guid;
+        row.id = id
         row.addEventListener("click", this.onShapeRowClick);
         const deleteBtn = row.querySelector("span");
         deleteBtn.id = "delete_"+shape.guid;
@@ -118,11 +122,11 @@ export default function ShapesPanel() {
         }
         const img = row.querySelector("img");
         shape.calcPosition();
-        const pos = shape.getPosition(shape.options.groupChildShapes);
+        const pos = shape.getPosition(true);
         const [width,height] = applyAspectRatio(null, 60, pos.width, pos.height);
         img.style.width = width + "px";
         img.style.height = height + "px";
-        img.src = await shape.toPng("dataurl");
+        img.src = await shape.toPng("dataurl",width,height,true);
         this.setupShapeContextMenu(shape);
     }
 

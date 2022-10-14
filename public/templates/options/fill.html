@@ -1,0 +1,86 @@
+<div class="row">
+    <div class="col-md-6 col-sm-6 col-12">
+        <div class="col-2">
+            <label for="fillType">Type</label>
+        </div>
+        <div class="col-10">
+            <select class="form-control form-control-sm" id="fillType">
+                <option value="none">None</option>
+                <option value="color">Color</option>
+                <option value="gradient">Gradient</option>
+                <option value="image">Image</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-6 col-12" id="fillTypeColor">
+        <div class="col-2">
+            <label for="fillTypeColorInput">Color</label>
+        </div>
+        <div class="col-10">
+            <input class="form-control form-control-sm" id="fillTypeColorInput"/>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-12" id="fillTypeGradient">
+        <div class="col-2">
+            <label for="fillGradientAngle">Rotate</label>
+        </div>
+        <div class="col-12">
+            <input class="form-control form-control-sm" type="number" id="fillGradientAngle"/>
+        </div>
+        <div class="col-12">
+            <table class="table table-bordered table-striped" id="fillGradientTable">
+                <tbody>
+                <tr>
+                    <th>Percent
+                        <button type="button" class="btn btn-link btn-sm" id="fillGradientAddBtn" title="Add new step">
+                            <span class="fa fa-plus"></span>
+                        </button>
+                    </th>
+                    <th>Color</th>
+                </tr>
+                <tr id="fillGradientTemplateRow" style="display:none">
+                    <td>
+                        <div>
+                            <button type="button" class="btn btn-link btn-sm" id="delete_step_0" title="Delete step">
+                                <span class="fa fa-plus" style="transform: rotate(45deg);color:red"></span>
+                            </button>
+                            <input class="form-control form-control-sm offset" type="number" id="step_offset_0"/>
+                        </div>
+                    </td>
+                    <td><input class="form-control form-control-sm color" id="step_stopColor_0"/></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-12" id="fillTypeImage">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                <button class="btn btn-primary" id="selectImageBtn">
+                    SELECT FILE
+                </button>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                <img width="100" height="100" id="fillImg" alt="preview"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="col-2">
+                    <label for="fillImageWidth">Width</label>
+                </div>
+                <div class="col-10">
+                    <input id="fillImageWidth" class="form-control form-control-sm" type="number"/>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="col-2">
+                    <label for="fillImageHeight">Height</label>
+                </div>
+                <div class="col-10">
+                    <input id="fillImageHeight" class="form-control form-control-sm" type="number"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
