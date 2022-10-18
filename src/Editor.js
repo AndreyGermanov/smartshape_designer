@@ -1,5 +1,5 @@
 import {Events} from "./events.js";
-import {EventsManager,SmartShape,SmartShapeManager,SmartShapeDisplayMode} from "./smart_shape/src/index.js";
+import {EventsManager,SmartShape,SmartShapeManager,SmartShapeDisplayMode} from "./SmartShapeConnector.js";
 import {Menus} from "../context_menu/src/index.js";
 import Triangle from "./assets/triangle.png";
 import Square from "./assets/square.png";
@@ -43,7 +43,8 @@ export default function Editor() {
                     canDrag:true,
                     canDelete:true
                 },
-                moveToTop: false
+                moveToTop: false,
+                groupChildShapes:false
             };
             if (event.itemId === "add_triangle") {
                 const shape = new SmartShape().init(this.selectedShape.root,shapeOptions,

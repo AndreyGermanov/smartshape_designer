@@ -1,4 +1,4 @@
-import {EventsManager} from "../smart_shape/src/index.js";
+import {EventsManager} from "../SmartShapeConnector.js";
 import {Events} from "../events.js";
 
 export default function CssTab(panel) {

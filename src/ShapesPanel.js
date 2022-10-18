@@ -1,4 +1,4 @@
-import {EventsManager, SmartShape, SmartShapeManager,ShapeEvents} from "./smart_shape/src/index.js";
+import {EventsManager, SmartShape, SmartShapeManager,ShapeEvents} from "./SmartShapeConnector.js";
 import {Events} from "./events.js";
 import {applyAspectRatio} from "./utils/geometry.js";
 
@@ -9,12 +9,29 @@ export default function ShapesPanel() {
     this.shapes = [];
     this.element = document.querySelector("#shapes_panel");
     this.init = async() => {
+        this.createHiddenInputs();
         this.setEventListeners();
         setTimeout(async() => {
             for (let shape of SmartShapeManager.getShapes()) {
                 await this.updateShape(shape);
             }
         },100)
+    }
+
+    this.createHiddenInputs = () => {
+        const input = document.createElement("input");
+        input.setAttribute("type","file");
+        input.id = "uploadFile"
+        input.style.display = "none";
+        input.addEventListener("change",this.uploadFile)
+        const form = document.createElement("form");
+        form.id = "uploadForm";
+        form.appendChild(input)
+        this.element.appendChild(form);
+        const a = document.createElement("a");
+        a.id = "downloadLink"
+        a.style.display = 'none';
+        this.element.appendChild(a);
     }
 
     this.setEventListeners = () => {
@@ -242,44 +259,42 @@ export default function ShapesPanel() {
         const jsonString = SmartShapeManager.toJSON(shapes);
         const blob = new Blob([jsonString]);
         const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
+        const a = document.querySelector("#downloadLink");
         a.download = this.collectionName+".json";
         a.href = url;
-        this.element.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
-        this.element.removeChild(a);
     }
 
+
     this.onLoadClick = () => {
-        const input = document.createElement("input");
-        input.setAttribute("type","file");
-        input.style.display = "none";
-        this.element.appendChild(input);
-        input.addEventListener("change",(event) => {
-            if (!event.target.files || !event.target.files.length) {
-                return;
-            }
-            const file = event.target.files[0];
-            const parts = file.name.split(".");
-            if (parts.length>1) {
-                parts.pop();
-            }
-            this.collectionName = parts.join(".")
-            const reader = new FileReader();
-            reader.onloadend = (event) => {
-                SmartShapeManager.clear();
-                SmartShapeManager.fromJSON(document.querySelector("#shape_container"),event.target.result);
-                if (SmartShapeManager.getShapes().length === 0) {
-                    alert("Could not load collection");
-                } else {
-                    setTimeout(() => {
-                        EventsManager.emit(Events.SELECT_SHAPE,SmartShapeManager.getShapes()[0]);
-                    },100)
-                }
-            }
-            reader.readAsText(file);
-        })
+        const input = this.element.querySelector("input[type='file']");
         input.click();
+    }
+
+    this.uploadFile = (event) => {
+        if (!event.target.files || !event.target.files.length) {
+            return;
+        }
+        const file = event.target.files[0];
+        const parts = file.name.split(".");
+        if (parts.length>1) {
+            parts.pop();
+        }
+        this.collectionName = parts.join(".")
+        const reader = new FileReader();
+        reader.onloadend = (event) => {
+            SmartShapeManager.clear();
+            SmartShapeManager.fromJSON(document.querySelector("#shape_container"),event.target.result);
+            if (SmartShapeManager.getShapes().length === 0) {
+                alert("Could not load collection");
+            } else {
+                setTimeout(() => {
+                    this.element.querySelector("#uploadForm").reset();
+                    EventsManager.emit(Events.SELECT_SHAPE,SmartShapeManager.getShapes()[0]);
+                },100)
+            }
+        }
+        reader.readAsText(file);
     }
 }
