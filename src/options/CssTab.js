@@ -22,6 +22,8 @@ export default function CssTab(panel) {
         setTimeout(() => {
             this.cssEditor.on("change", () => {
                 this.panel.selectedShape.options.style = this.panel.stringToStyles(this.cssEditor.getValue());
+                this.panel.fillTab.loadFillOptions();
+                this.panel.strokeTab.loadStrokeOptions();
                 EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS,this.panel.selectedShape);
             })
         },100)

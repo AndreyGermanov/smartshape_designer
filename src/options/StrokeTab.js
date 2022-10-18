@@ -1,4 +1,4 @@
-import {getColorBrightness, hex2rgba, rgba2hex} from "../utils/color.js";
+import {getColorBrightness, hex2rgba, isColorSymbol, rgba2hex} from "../utils/color.js";
 import {EventsManager} from "../SmartShapeConnector.js";
 import {Events} from "../events.js";
 
@@ -14,6 +14,7 @@ export default function StrokeTab (panel) {
 
     this.init = () => {
         this.strokeColorPicker.noAlpha = true;
+        this.strokeColorPicker.self.classList.add(this.strokeColorPicker.state.class + '__dialog--no-alpha');
         this.setFillEventListeners();
         return this;
     }
@@ -39,8 +40,8 @@ export default function StrokeTab (panel) {
         this.strokeColor.style.color = brightness > 160 ? 'black' : 'white';
         this.strokeColor.value = hexString;
         if (this.panel.selectedShape) {
-            this.onStrokeColorChange({target: this.strokeColor});
-            EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS, this.panel.selectedShape);
+            this.onStrokeColorChange({target: this.strokeColor,key:"a"});
+            this.updateShape();
         }
     }
 
@@ -54,33 +55,46 @@ export default function StrokeTab (panel) {
         this.strokeColor.style.backgroundColor = event.target.value.substring(0,8);
         this.strokeColor.style.color = brightness > 160 ? 'black' : 'white';
         this.strokeColorPicker.set(...rgba);
-        this.panel.selectedShape.setOptions({stroke:event.target.value.substring(0,8)});
-        EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS, this.panel.selectedShape);
+        if (!isColorSymbol(event.key)) {
+            return
+        }
+        this.panel.selectedShape.setOptions({style:{stroke:event.target.value.substring(0,8)}});
+        this.updateShape();
     }
 
     this.loadStrokeOptions = () => {
-        const options = this.panel.selectedShape.options;
+        const options = this.panel.selectedShape.options.style;
         this.strokeColor.value = options.stroke || "#000000";
-        this.strokeWidth.value = options.strokeWidth;
-        this.strokeDasharray.value = options.strokeDasharray;
-        this.strokeLinecap.value = options.strokeLinecap || "square";
+        this.strokeWidth.value = options["stroke-width"];
+        this.strokeDasharray.value = options["stroke-dasharray"];
+        this.strokeLinecap.value = options["stroke-linecap"] || "square";
         this.onStrokeColorChange({target:this.strokeColor});
         this.strokeLinecap.querySelector("option").removeAttribute("selected");
         this.strokeLinecap.querySelector("option[value='"+this.strokeLinecap.value+"']").setAttribute("selected", "true");
     }
 
     this.onStrokeLinecapChange = (event) => {
-        this.panel.selectedShape.setOptions({strokeLinecap:event.target.value});
-        EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS,this.panel.selectedShape);
+        this.panel.selectedShape.setOptions({style:{"stroke-linecap":event.target.value}});
+        this.updateShape();
     }
 
     this.onStrokeWidthChange = (event) => {
-        this.panel.selectedShape.setOptions({strokeWidth:event.target.value});
-        EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS,this.panel.selectedShape);
+        this.panel.selectedShape.setOptions({style:{"stroke-width":event.target.value}});
+        this.updateShape();
     }
 
     this.onStrokeDasharrayChange = (event) => {
-        this.panel.selectedShape.setOptions({strokeDasharray:event.target.value});
+        this.panel.selectedShape.setOptions({style:{"stroke-dasharray":event.target.value}});
+        this.updateShape();
+    }
+
+    this.updateShape = () => {
         EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS,this.panel.selectedShape);
+        setTimeout(() => {
+            const newText = this.panel.stylesToString(this.panel.selectedShape.options.style);
+            if (newText !== this.panel.cssEditor.getValue()) {
+                this.panel.cssEditor.getDoc().setValue(this.panel.stylesToString(this.panel.selectedShape.options.style));
+            }
+        },100);
     }
 }

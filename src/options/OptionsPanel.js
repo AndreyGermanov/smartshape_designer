@@ -20,12 +20,13 @@ export default function OptionsPanel() {
 
     this.fillTab = null;
     this.strokeTab = null;
+    this.cssTab = null;
 
     this.init = () => {
         this.setEventListeners();
-        new CssTab(this).init();
         this.fillTab = new FillTab(this).init();
         this.strokeTab = new StrokeTab(this).init();
+        this.cssTab = new CssTab(this).init();
     }
 
     this.setEventListeners = () => {
