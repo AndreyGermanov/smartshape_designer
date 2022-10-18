@@ -16,7 +16,6 @@ export default function Studio() {
         setTimeout(() => {
             this.onWindowResize();
         },100);
-
     }
 
     this.setEventListeners = () => {
