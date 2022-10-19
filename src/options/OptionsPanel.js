@@ -85,12 +85,8 @@ export default function OptionsPanel() {
         this.element.querySelector("#id").setAttribute("value",shape.options.id);
         this.element.querySelector("#name").setAttribute("value",shape.options.name);
         const pos = shape.getPosition(true);
-        this.element.querySelector("#width").setAttribute("value",parseInt(pos.width));
-        this.element.querySelector("#height").setAttribute("value",parseInt(pos.height));
-        this.element.querySelector("#minWidth").setAttribute("value",shape.options.minWidth);
-        this.element.querySelector("#minHeight").setAttribute("value",shape.options.minHeight);
-        this.element.querySelector("#maxWidth").setAttribute("value",shape.options.maxWidth);
-        this.element.querySelector("#maxHeight").setAttribute("value",shape.options.maxHeight);
+        this.element.querySelector("#width").value = parseInt(pos.width);
+        this.element.querySelector("#height").value = parseInt(pos.height);
         const text = stylesToString(shape.options.style);
         this.cssEditor.getDoc().setValue(text,false);
         this.cssTextArea.value = text;
