@@ -68,6 +68,11 @@ export default function FillTab (panel) {
         this.fillColorColumn.style.display = 'none';
         this.fillTypeGradient.style.display = 'none';
         this.fillTypeImage.style.display = 'none';
+        this.fillGradientAngle.value = 0;
+        this.fillGradientType.value = "linear";
+        Array.from(this.fillGradientType.querySelectorAll("option"))
+            .forEach(item=>item.removeAttribute("selected"));
+        this.fillGradientType.querySelector("option[value='linear']").setAttribute("selected",true);
         Array.from(this.fillGradientTable.querySelectorAll("tr[id]"))
             .filter(row=>row.style.display !== "none")
             .forEach(row=>row.parentNode.removeChild(row))
