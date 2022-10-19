@@ -68,6 +68,10 @@ export default function FillTab (panel) {
         this.fillColorColumn.style.display = 'none';
         this.fillTypeGradient.style.display = 'none';
         this.fillTypeImage.style.display = 'none';
+        Array.from(this.fillGradientTable.querySelectorAll("tr[id]"))
+            .filter(row=>row.style.display !== "none")
+            .forEach(row=>row.parentNode.removeChild(row))
+        this.fillImage.src = "";
         switch (event.target.value) {
             case "none":
                 this.panel.selectedShape.setOptions({style:{fill:'none'},fillGradient:null,fillImage:null})
