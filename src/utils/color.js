@@ -34,6 +34,17 @@ export const hex2rgba = (hexString) => {
     return null
 }
 
+export const setColorInput = (input,picker,color) => {
+    let rgba = hex2rgba(color);
+    if (!rgba) {
+        rgba = [0,0,0,1]
+    }
+    const brightness = getColorBrightness(...rgba);
+    input.style.backgroundColor = "#"+rgba2hex(...rgba);
+    input.style.color = brightness > 160 ? 'black' : 'white';
+    picker.set(...rgba,false);
+}
+
 export const isColorSymbol = (symbol) => {
     return symbol && symbol.length === 1 && (isAlphaNum(symbol) || symbol === "#");
 }

@@ -726,8 +726,12 @@
                 offEvents(EVENTS_DOWN, source, doClick);
                 return doExit(), fire('pop', theColor);
             };
-            $.set = function (r, g, b, a) {
-                return $._set(r, g, b, a), fire('change', [r, g, b, a]);
+            $.set = function (r, g, b, a,fireEvent) {
+                if (fireEvent) {
+                    return $._set(r, g, b, a), fire('change', [r, g, b, a]);
+                } else {
+                    return $._set(r, g, b, a);
+                }
             };
             $.self = self;
             $._set = function (r, g, b, a) {

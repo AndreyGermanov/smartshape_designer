@@ -1,6 +1,7 @@
-import {getColorBrightness, hex2rgba, isColorSymbol, rgba2hex} from "../utils/color.js";
+import {getColorBrightness, hex2rgba, isColorSymbol, rgba2hex, setColorInput} from "../utils/color.js";
 import {EventsManager} from "../SmartShapeConnector.js";
 import {Events} from "../events.js";
+import {stylesToString} from "../utils/css.js";
 export default function FillTab (panel) {
     this.panel = panel
 
@@ -73,6 +74,7 @@ export default function FillTab (panel) {
                 break;
             case "color":
                 this.fillColorColumn.style.display = '';
+                setColorInput(this.fillColorInput, this.colorFillPicker, this.fillColorInput.value);
                 this.panel.selectedShape.setOptions({style:{fill:this.fillColorInput.value},fillGradient:null,fillImage:null})
                 break;
             case "gradient":
@@ -90,6 +92,7 @@ export default function FillTab (panel) {
     }
 
     this.onFillColorChange = (event) => {
+        setColorInput(this.fillColorInput, this.colorFillPicker, event.target.value);
         const rgba = hex2rgba(event.target.value);
         if (!rgba) {
             return
@@ -97,7 +100,7 @@ export default function FillTab (panel) {
         const brightness = getColorBrightness(...rgba);
         this.fillColorInput.style.backgroundColor = event.target.value;
         this.fillColorInput.style.color = brightness > 160 ? 'black' : 'white';
-        this.colorFillPicker.set(...rgba);
+        this.colorFillPicker.set(...rgba,false);
         if (!isColorSymbol(event.key)) {
             return
         }
@@ -119,13 +122,16 @@ export default function FillTab (panel) {
         this.fillGradientType.value = "linear";
         this.fillGradientType.querySelector("option").removeAttribute("selected");
         this.fillGradientType.querySelector("option[value='linear']").setAttribute("selected", "true");
+
         if (!this.fillColorInput.value) {
-            this.fillColorInput.value = "#000000ff";
+            this.fillColorInput.value = "none";
         }
         let fill = this.panel.selectedShape.options.style.fill;
         if (!fill) {
             fill = "none";
         }
+        setColorInput(this.fillColorInput, this.colorFillPicker, fill)
+        this.fillColorInput.value = fill;
         switch (fill) {
             case "#image":
                 this.fillTypeDropDown.querySelector("option").removeAttribute("selected");
@@ -211,6 +217,7 @@ export default function FillTab (panel) {
         offset.addEventListener("keyup",this.updateStepOffset);
         offset.addEventListener("change",this.updateStepOffset)
         const color = row.querySelector("input.color");
+        color.id = "step_stopColor_"+(index+1);
         if (gradientStep) {
             offset.value = parseInt(gradientStep.offset);
             color.value = gradientStep.stopColor;
@@ -219,7 +226,7 @@ export default function FillTab (panel) {
         if (gradientStep) {
             const rgba = hex2rgba(gradientStep.stopColor);
             if (rgba) {
-                colorPicker.set(...rgba)
+                colorPicker.set(...rgba,false)
             }
         }
         color.addEventListener("keyup",(event) => {
@@ -245,9 +252,10 @@ export default function FillTab (panel) {
     }
 
     this.updateStepColor = (event,picker) => {
+        setColorInput(event.target,picker,event.target.value);
         const rgba = hex2rgba(event.target.value);
         if (rgba) {
-            picker.set(...rgba)
+            picker.set(...rgba,false)
         }
         if (!isColorSymbol(event.key)) {
             return
@@ -334,9 +342,10 @@ export default function FillTab (panel) {
     this.updateShape = () => {
         EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS,this.panel.selectedShape);
         setTimeout(() => {
-            const newText = this.panel.stylesToString(this.panel.selectedShape.options.style);
+            const newText = stylesToString(this.panel.selectedShape.options.style);
             if (newText !== this.panel.cssEditor.getValue()) {
-                this.panel.cssEditor.getDoc().setValue(this.panel.stylesToString(this.panel.selectedShape.options.style));
+                this.panel.cssEditor.getDoc().setValue(newText);
+                this.panel.cssTextArea.value = newText;
             }
         },100);
     }
