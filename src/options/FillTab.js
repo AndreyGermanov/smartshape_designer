@@ -112,7 +112,6 @@ export default function FillTab (panel) {
         this.fillColorColumn.style.display = 'none'
         this.fillTypeGradient.style.display = 'none';
         this.fillTypeImage.style.display = 'none';
-        this.fillImage.removeAttribute("src");
         this.fillImageWidth.value = 0;
         this.fillImageHeight.value = 0;
         Array.from(this.fillGradientTable.querySelectorAll("tr"))
