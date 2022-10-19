@@ -33,3 +33,25 @@ export const hex2rgba = (hexString) => {
     }
     return null
 }
+
+export const setColorInput = (input,picker,color) => {
+    let rgba = hex2rgba(color);
+    if (!rgba) {
+        rgba = [0,0,0,1]
+    }
+    const brightness = getColorBrightness(...rgba);
+    input.style.backgroundColor = "#"+rgba2hex(...rgba);
+    input.style.color = brightness > 160 ? 'black' : 'white';
+    picker.set(...rgba,false);
+}
+
+export const isColorSymbol = (symbol) => {
+    return symbol && symbol.length === 1 && (isAlphaNum(symbol) || symbol === "#");
+}
+
+const isAlphaNum = (symbol) => {
+    const code = symbol.charCodeAt(0);
+    return (code >= 48 && code <= 57) ||
+        (code >= 65 && code <= 90) ||
+        (code >= 97 && code <= 122)
+}

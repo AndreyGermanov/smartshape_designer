@@ -208,10 +208,14 @@ export default function ShapesPanel() {
     }
 
     this.selectShape = (shape) => {
+        const selectedShape = this.element.querySelector("#row_"+shape.guid);
+        if (!selectedShape) {
+            return
+        }
         this.element.querySelectorAll(".shape_row").forEach(node => {
             node.classList.remove("selected");
         })
-        this.element.querySelector("#row_"+shape.guid).classList.add("selected");
+        selectedShape.classList.add("selected");
         this.element.scrollTop = this.element.querySelector("#row_"+shape.guid).offsetTop;
     }
 

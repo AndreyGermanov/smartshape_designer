@@ -99,6 +99,9 @@ export default function Editor() {
     }
 
     this.selectShape = (event) => {
+        if (!SmartShapeManager.getShape(event.target) || event.target.getRootParent()) {
+            return
+        }
         this.selectedShape = event.target;
         SmartShapeManager.getShapes().forEach(shape=>shape.hide())
         this.selectedShape.show();

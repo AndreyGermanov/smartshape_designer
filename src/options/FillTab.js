@@ -1,6 +1,7 @@
-import {getColorBrightness, hex2rgba, rgba2hex} from "../utils/color.js";
+import {getColorBrightness, hex2rgba, isColorSymbol, rgba2hex, setColorInput} from "../utils/color.js";
 import {EventsManager} from "../SmartShapeConnector.js";
 import {Events} from "../events.js";
+import {stylesToString} from "../utils/css.js";
 export default function FillTab (panel) {
     this.panel = panel
 
@@ -58,8 +59,8 @@ export default function FillTab (panel) {
         this.fillColorInput.style.color = brightness > 160 ? 'black' : 'white';
         this.fillColorInput.value = hexString;
         if (this.panel.selectedShape) {
-            this.onFillColorChange({target: this.fillColorInput});
-            EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS, this.panel.selectedShape);
+            this.onFillColorChange({target: this.fillColorInput,key:"a"});
+            this.updateShape();
         }
     }
 
@@ -69,29 +70,29 @@ export default function FillTab (panel) {
         this.fillTypeImage.style.display = 'none';
         switch (event.target.value) {
             case "none":
-                this.panel.selectedShape.setOptions({fill:'none',fillGradient:null,fillImage:null})
+                this.panel.selectedShape.setOptions({style:{fill:'none'},fillGradient:null,fillImage:null})
                 break;
             case "color":
                 this.fillColorColumn.style.display = '';
-                this.panel.selectedShape.setOptions({fill:this.fillColorInput.value,fillGradient:null,fillImage:null})
+                setColorInput(this.fillColorInput, this.colorFillPicker, this.fillColorInput.value);
+                this.panel.selectedShape.setOptions({style:{fill:this.fillColorInput.value},fillGradient:null,fillImage:null})
                 break;
             case "gradient":
                 this.fillTypeGradient.style.display = '';
                 const fillGradient = this.getGradientData();
-                this.panel.selectedShape.setOptions({fill:'none',fillGradient,fillImage:null});
+                this.panel.selectedShape.setOptions({style:{fill:'#gradient'},fillGradient,fillImage:null});
                 break;
             case "image":
                 this.fillTypeImage.style.display = '';
                 const fillImage = this.getFillImageData()
-                if (fillImage) {
-                    this.panel.selectedShape.setOptions({fill: 'none', fillImage, fillGradient: null});
-                }
+                this.panel.selectedShape.setOptions({style:{fill: '#image'}, fillImage, fillGradient: null});
                 break;
         }
-        EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS,this.panel.selectedShape);
+        this.updateShape();
     }
 
     this.onFillColorChange = (event) => {
+        setColorInput(this.fillColorInput, this.colorFillPicker, event.target.value);
         const rgba = hex2rgba(event.target.value);
         if (!rgba) {
             return
@@ -99,9 +100,12 @@ export default function FillTab (panel) {
         const brightness = getColorBrightness(...rgba);
         this.fillColorInput.style.backgroundColor = event.target.value;
         this.fillColorInput.style.color = brightness > 160 ? 'black' : 'white';
-        this.colorFillPicker.set(...rgba);
-        this.panel.selectedShape.setOptions({fillGradient:null,fillImage:null,fill:event.target.value});
-        EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS, this.panel.selectedShape);
+        this.colorFillPicker.set(...rgba,false);
+        if (!isColorSymbol(event.key)) {
+            return
+        }
+        this.panel.selectedShape.setOptions({fillGradient:null,fillImage:null,style:{fill:event.target.value}});
+        this.updateShape();
     }
 
     this.loadFillOptions = () => {
@@ -118,35 +122,61 @@ export default function FillTab (panel) {
         this.fillGradientType.value = "linear";
         this.fillGradientType.querySelector("option").removeAttribute("selected");
         this.fillGradientType.querySelector("option[value='linear']").setAttribute("selected", "true");
-        this.fillColorInput.value = "#000000ff";
-        if (this.panel.selectedShape.options.fill.toString().length && this.panel.selectedShape.options.fill !== "none") {
-            this.fillColorColumn.style.display = '';
-            this.fillColorInput.style.backgroundColor = this.panel.selectedShape.options.fill;
-            this.fillColorInput.value = this.panel.selectedShape.options.fill;
-            this.fillTypeDropDown.value = "color";
-            this.fillTypeDropDown.querySelector("option").removeAttribute("selected");
-            this.fillTypeDropDown.querySelector("option[value='color']").setAttribute("selected", "true");
-        } else if (this.panel.selectedShape.options.fillImage !== null) {
-            this.fillTypeImage.style.display = '';
-            if (this.fillImage.src !== this.panel.selectedShape.options.fillImage.href) {
-                this.fillImage.src = this.panel.selectedShape.options.fillImage.href;
-            }
-            this.fillImageWidth.value = parseInt(this.panel.selectedShape.options.fillImage.width);
-            this.fillImageHeight.value = parseInt(this.panel.selectedShape.options.fillImage.height);
-            this.fillTypeDropDown.querySelector("option").removeAttribute("selected");
-            this.fillTypeDropDown.querySelector("option[value='image']").setAttribute("selected","true");
-        } else if (this.panel.selectedShape.options.fillGradient !== null) {
-            this.fillTypeDropDown.value = "gradient";
-            this.fillTypeGradient.style.display = '';
-            this.fillGradientAngle.value = this.parseGradientAngle()
-            this.fillGradientType.value = this.panel.selectedShape.options.fillGradient.type;
-            this.fillGradientType.querySelector("option").removeAttribute("selected");
-            this.fillGradientType.querySelector("option[value='"+this.fillGradientType.value+"']").setAttribute("selected","true");
-            this.createGradientTable();
-        } else {
-            this.fillTypeDropDown.value = "none";
-            this.fillTypeDropDown.querySelector("option").removeAttribute("selected");
-            this.fillTypeDropDown.querySelector("option[value='none']").setAttribute("selected","true");
+
+        if (!this.fillColorInput.value) {
+            this.fillColorInput.value = "none";
+        }
+        let fill = this.panel.selectedShape.options.style.fill;
+        if (!fill) {
+            fill = "none";
+        }
+        setColorInput(this.fillColorInput, this.colorFillPicker, fill)
+        this.fillColorInput.value = fill;
+        switch (fill) {
+            case "#image":
+                this.fillTypeDropDown.querySelector("option").removeAttribute("selected");
+                this.fillTypeDropDown.querySelector("option[value='image']").setAttribute("selected","true");
+                this.fillTypeImage.style.display = '';
+                if (!this.panel.selectedShape.fillImage) {
+                    return
+                }
+                if (this.fillImage.src !== this.panel.selectedShape.options.fillImage.href) {
+                    this.fillImage.src = this.panel.selectedShape.options.fillImage.href;
+                }
+                this.fillImageWidth.value = parseInt(this.panel.selectedShape.options.fillImage.width);
+                this.fillImageHeight.value = parseInt(this.panel.selectedShape.options.fillImage.height);
+                break;
+            case "#gradient":
+                this.fillTypeDropDown.value = "gradient";
+                this.fillTypeDropDown.querySelector("option").removeAttribute("selected");
+                this.fillTypeDropDown.querySelector("option[value='gradient']").setAttribute("selected","true");
+                this.fillTypeGradient.style.display = '';
+                this.fillGradientAngle.value = this.parseGradientAngle()
+                this.fillGradientType.value = this.panel.selectedShape.options.fillGradient.type || "linear";
+                this.fillGradientType.querySelector("option").removeAttribute("selected");
+                this.fillGradientType.querySelector("option[value='" + this.fillGradientType.value + "']").setAttribute("selected", "true");
+                this.createGradientTable();
+                break;
+            case "none":
+                this.fillTypeDropDown.value = "none";
+                this.fillTypeDropDown.querySelector("option").removeAttribute("selected");
+                this.fillTypeDropDown.querySelector("option[value='none']").setAttribute("selected","true");
+                break;
+            default:
+                this.fillTypeDropDown.value = "color";
+                this.fillTypeDropDown.querySelector("option").removeAttribute("selected");
+                this.fillTypeDropDown.querySelector("option[value='color']").setAttribute("selected", "true");
+                this.fillColorColumn.style.display = '';
+                this.fillColorInput.style.backgroundColor = fill;
+                const rgba = hex2rgba(fill);
+                if (!rgba) {
+                    return
+                }
+                const brightness = getColorBrightness(...rgba);
+                this.fillColorInput.style.color = brightness > 160 ? 'black' : 'white';
+                if (this.fillColorInput.value !== fill) {
+                    this.fillColorInput.value = fill;
+                }
         }
     }
 
@@ -187,6 +217,7 @@ export default function FillTab (panel) {
         offset.addEventListener("keyup",this.updateStepOffset);
         offset.addEventListener("change",this.updateStepOffset)
         const color = row.querySelector("input.color");
+        color.id = "step_stopColor_"+(index+1);
         if (gradientStep) {
             offset.value = parseInt(gradientStep.offset);
             color.value = gradientStep.stopColor;
@@ -195,7 +226,7 @@ export default function FillTab (panel) {
         if (gradientStep) {
             const rgba = hex2rgba(gradientStep.stopColor);
             if (rgba) {
-                colorPicker.set(...rgba)
+                colorPicker.set(...rgba,false)
             }
         }
         color.addEventListener("keyup",(event) => {
@@ -221,9 +252,13 @@ export default function FillTab (panel) {
     }
 
     this.updateStepColor = (event,picker) => {
+        setColorInput(event.target,picker,event.target.value);
         const rgba = hex2rgba(event.target.value);
         if (rgba) {
-            picker.set(...rgba)
+            picker.set(...rgba,false)
+        }
+        if (!isColorSymbol(event.key)) {
+            return
         }
         this.updateGradientData();
     }
@@ -257,8 +292,8 @@ export default function FillTab (panel) {
                 offset: parseInt(row.querySelector("input.offset").value)+"%",
                 stopColor: row.querySelector("input.color").value
             }))
-        this.panel.selectedShape.setOptions({fillGradient});
-        EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS,this.panel.selectedShape);
+        this.panel.selectedShape.setOptions({style:{fill:"#gradient"},fillGradient});
+        this.updateShape();
     }
 
     this.updateImageData = () => {
@@ -267,8 +302,8 @@ export default function FillTab (panel) {
             width: this.fillImageWidth.value,
             height: this.fillImageHeight.value
         }
-        this.panel.selectedShape.setOptions({fill:'none',fillGradient:null,fillImage});
-        EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS,this.panel.selectedShape);
+        this.panel.selectedShape.setOptions({style:{fill:'#image'},fillImage});
+        this.updateShape();
     }
 
     this.getFillImageData = () => {
@@ -302,5 +337,16 @@ export default function FillTab (panel) {
         this.fillImageWidth.value = parseInt(event.target.width);
         this.fillImageHeight.value = parseInt(event.target.height);
         this.updateImageData();
+    }
+
+    this.updateShape = () => {
+        EventsManager.emit(Events.CHANGE_SHAPE_OPTIONS,this.panel.selectedShape);
+        setTimeout(() => {
+            const newText = stylesToString(this.panel.selectedShape.options.style);
+            if (newText !== this.panel.cssEditor.getValue()) {
+                this.panel.cssEditor.getDoc().setValue(newText);
+                this.panel.cssTextArea.value = newText;
+            }
+        },100);
     }
 }

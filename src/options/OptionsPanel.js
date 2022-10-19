@@ -9,6 +9,7 @@ import FillTab from "./FillTab.js";
 import StrokeTab from "./StrokeTab.js";
 import CssTab from "./CssTab.js";
 import {Events} from "../events.js";
+import {stylesToString} from "../utils/css.js";
 
 export default function OptionsPanel() {
 
@@ -23,9 +24,9 @@ export default function OptionsPanel() {
 
     this.init = () => {
         this.setEventListeners();
-        new CssTab(this).init();
         this.fillTab = new FillTab(this).init();
         this.strokeTab = new StrokeTab(this).init();
+        new CssTab(this).init();
     }
 
     this.setEventListeners = () => {
@@ -43,7 +44,7 @@ export default function OptionsPanel() {
 
             })
         })
-        EventsManager.subscribe([Events.SELECT_SHAPE,ShapeEvents.SHAPE_ACTIVATED], (event) => {
+        EventsManager.subscribe([Events.SELECT_SHAPE, ShapeEvents.SHAPE_ACTIVATED], (event) => {
             this.selectedShape = event.target;
             if (this.selectedShape) {
                 document.getElementById("optionsCard").style.display = '';
@@ -90,28 +91,11 @@ export default function OptionsPanel() {
         this.element.querySelector("#minHeight").setAttribute("value",shape.options.minHeight);
         this.element.querySelector("#maxWidth").setAttribute("value",shape.options.maxWidth);
         this.element.querySelector("#maxHeight").setAttribute("value",shape.options.maxHeight);
-        this.cssEditor.getDoc().setValue(this.stylesToString(shape.options.style));
+        const text = stylesToString(shape.options.style);
+        this.cssEditor.getDoc().setValue(text,false);
+        this.cssTextArea.value = text;
         this.fillTab.loadFillOptions();
         this.strokeTab.loadStrokeOptions();
-    }
-
-    this.stylesToString = (stylesObj) => {
-        const strings = [];
-        for (let name in stylesObj) {
-            strings.push(name+":"+stylesObj[name]);
-        }
-        return strings.join("\n")
-    }
-
-    this.stringToStyles = (styleString) => {
-        const strings = styleString.split("\n");
-        const result = {};
-        strings.forEach(string => {
-            const parts = string.split(":")
-            const name = parts.shift();
-            result[name] = parts.join(":").replace(";","");
-        })
-        return result;
     }
 
     this.applyOption = (event) => {

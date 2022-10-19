@@ -7,7 +7,6 @@ export default function Studio() {
     this.shapesPanel = new ShapesPanel();
     this.optionsPanel = new OptionsPanel();
 
-
     this.init = () => {
         this.editor.init(this);
         this.shapesPanel.init();
