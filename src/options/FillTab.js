@@ -112,8 +112,12 @@ export default function FillTab (panel) {
         this.fillColorColumn.style.display = 'none'
         this.fillTypeGradient.style.display = 'none';
         this.fillTypeImage.style.display = 'none';
-        this.fillImageWidth.value = 0;
-        this.fillImageHeight.value = 0;
+        if (!this.fillImageWidth.value) {
+            this.fillImageWidth.value = 0;
+        }
+        if (!this.fillImageHeight.value) {
+            this.fillImageHeight.value = 0;
+        }
         Array.from(this.fillGradientTable.querySelectorAll("tr"))
             .filter(item => item.style.display !== "none" && !item.querySelectorAll("th").length)
             .forEach(item => item.parentNode.removeChild(item));
