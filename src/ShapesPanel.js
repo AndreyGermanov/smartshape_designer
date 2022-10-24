@@ -1,6 +1,8 @@
 import {EventsManager, SmartShape, SmartShapeManager,ShapeEvents} from "./SmartShapeConnector.js";
 import {Events} from "./events.js";
 import {applyAspectRatio} from "./utils/geometry.js";
+import {uploadTextFile} from "./utils/uploadFile.js";
+import {showAlert} from "./utils/index.js";
 
 export default function ShapesPanel() {
 
@@ -46,7 +48,10 @@ export default function ShapesPanel() {
                 event.target.options.id.search("_rotatebox") === -1 &&
                 !event.target.getParent()
             ) {
-                this.addShapeCell(event.target);
+                if (!event.parent) {
+                    event.target.hide();
+                    this.addShapeCell(event.target);
+                }
             }
         })
         EventsManager.subscribe(Events.SELECT_SHAPE, (event) => {
@@ -90,9 +95,9 @@ export default function ShapesPanel() {
     }
 
     this.addShape = () => {
-        new SmartShape().init(document.querySelector("#shape_container"),{
-            id: "shape_"+SmartShapeManager.shapes.length,
-            name: "Shape #" + SmartShapeManager.shapes.length,
+        const shape = new SmartShape().init(document.querySelector("#shape_container"),{
+            id: "shape_"+SmartShapeManager.length(),
+            name: "Shape #" + SmartShapeManager.length(),
             canAddPoints: true,
             canDrag: true,
             canScale: true,
@@ -102,8 +107,10 @@ export default function ShapesPanel() {
                 canDelete:true
             },
             moveToTop: false,
-            forceCreateEvent:true
+            forceCreateEvent:true,
+            groupChildShapes:false
         },[[0,100],[100,0],[200,100]]);
+        EventsManager.emit(Events.SELECT_SHAPE,shape);
     }
 
     this.addShapeCell = (shape) => {
@@ -114,14 +121,12 @@ export default function ShapesPanel() {
         const row = this.element.querySelector(".shape_row").cloneNode(true);
         row.id = id
         row.addEventListener("click", this.onShapeRowClick);
-        const deleteBtn = row.querySelector("span");
+        const deleteBtn = row.querySelector("span.fa");
         deleteBtn.id = "delete_"+shape.guid;
         deleteBtn.addEventListener("click",this.onDeleteShapeClick);
         row.style.display = '';
         this.element.querySelector(".shape_row").parentNode.appendChild(row);
-        shape.setOptions({groupChildShapes:false});
-        this.updateShape(shape)
-        EventsManager.emit(Events.SELECT_SHAPE,shape);
+        this.updateShape(shape);
     }
 
     this.replaceShapeCell = (shape,oldShape) => {
@@ -145,6 +150,8 @@ export default function ShapesPanel() {
         img.style.width = width + "px";
         img.style.height = height + "px";
         img.src = await shape.toPng("dataurl",width,height,true);
+        row.querySelector(".shape_name").innerHTML = shape.options.name;
+        row.querySelector(".shape_id").innerHTML = "("+shape.options.id+")";
         this.setupShapeContextMenu(shape);
     }
 
@@ -212,16 +219,16 @@ export default function ShapesPanel() {
         if (!selectedShape) {
             return
         }
-        this.element.querySelectorAll(".shape_row").forEach(node => {
-            node.classList.remove("selected");
-        })
+        const prevItem = this.element.querySelector(".selected");
+        if (prevItem) {
+            prevItem.classList.remove("selected");
+        }
         selectedShape.classList.add("selected");
-        this.element.scrollTop = this.element.querySelector("#row_"+shape.guid).offsetTop;
     }
 
     this.onShapeRowClick = (event) => {
         let target = event.target;
-        if (event.target.tagName === "SPAN") {
+        if (event.target.tagName === "SPAN" && event.target.classList.contains("fa")) {
             this.onDeleteShapeClick(event);
             return;
         }
@@ -276,29 +283,25 @@ export default function ShapesPanel() {
         input.click();
     }
 
-    this.uploadFile = (event) => {
-        if (!event.target.files || !event.target.files.length) {
-            return;
+    this.uploadFile = async(event) => {
+        const result = await uploadTextFile(event.target);
+        if (!result) {
+            showAlert("Could not load collection");
         }
-        const file = event.target.files[0];
-        const parts = file.name.split(".");
+        const parts = result.name.split(".");
         if (parts.length>1) {
             parts.pop();
         }
         this.collectionName = parts.join(".")
-        const reader = new FileReader();
-        reader.onloadend = (event) => {
-            SmartShapeManager.clear();
-            SmartShapeManager.fromJSON(document.querySelector("#shape_container"),event.target.result);
-            if (SmartShapeManager.getShapes().length === 0) {
-                alert("Could not load collection");
-            } else {
-                setTimeout(() => {
-                    this.element.querySelector("#uploadForm").reset();
-                    EventsManager.emit(Events.SELECT_SHAPE,SmartShapeManager.getShapes()[0]);
-                },100)
-            }
+        SmartShapeManager.clear();
+        SmartShapeManager.fromJSON(document.querySelector("#shape_container"),result.data);
+        if (SmartShapeManager.getShapes().length === 0) {
+            alert("Could not load collection");
+        } else {
+            setTimeout(() => {
+                this.element.querySelector("#uploadForm").reset();
+                EventsManager.emit(Events.SELECT_SHAPE,SmartShapeManager.getShapes()[0]);
+            },100)
         }
-        reader.readAsText(file);
     }
 }

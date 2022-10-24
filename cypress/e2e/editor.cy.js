@@ -135,4 +135,18 @@ describe('Shape editor tests', () => {
       });
     });
   })
+  it("Import shape from JSON", () => {
+    cy.visit('http://localhost:5173').then(() => {
+      cy.wait(5000).then(() => {
+        const shapes_panel = Cypress.$("#shapes_panel").toArray()[0];
+        const options_card = Cypress.$("#optionsCard").toArray()[0];
+        const shape_container = Cypress.$("#shape_container").toArray()[0];
+        const create_new_shape = Cypress.$("#create_new_shape").toArray()[0];
+        assert.isDefined(shapes_panel, "Shapes panel should exist");
+        assert.equal(options_card.style.display, 'none', "Options panel should be hidden by default");
+        assert.equal(shape_container.style.display, 'none', 'Shapes editor should be hidden by default');
+        assert.notEqual(create_new_shape.style.display, 'none', 'Panel with button "Create New Shape" should be visible');
+      })
+    })
+  })
 })

@@ -3,12 +3,27 @@ import {EventsManager,SmartShape,SmartShapeManager,SmartShapeDisplayMode} from "
 import {Menus} from "../context_menu/src/index.js";
 import Triangle from "./assets/triangle.png";
 import Square from "./assets/square.png";
+import {uploadTextFile} from "./utils/uploadFile.js";
+import {showAlert} from "./utils/index.js";
+import {recursiveDeepCopy} from "./smart_shape/src/utils/index.js";
 
 export default function Editor() {
     this.selectedShape = null;
     this.element = document.querySelector("#editor");
     this.menu = null
     this.studio = null;
+    this.newShapeOptions = {
+        canAddPoints: true,
+        canDrag: true,
+        canScale: true,
+        canRotate: true,
+        pointOptions:{
+            canDrag:true,
+            canDelete:true
+        },
+        moveToTop: false,
+        groupChildShapes:false
+    };
 
     this.init = (studio) => {
         this.studio = studio;
@@ -20,9 +35,21 @@ export default function Editor() {
     this.setupMenu = () => {
         this.menu =Menus.create([
             {id:"add_triangle",title:"Add triangle",image:Triangle},
-            {id:"add_square",title:"Add square",image:Square}
+            {id:"add_square",title:"Add square",image:Square},
+            {id:"import_json",title:"Import from JSON"}
         ],
-            document.getElementById("editorMenuBtn"),'click');
+            document.getElementById("editorMenuBtn"),'click'
+        );
+        this.fileInputForm = document.createElement("form");
+        this.fileInput = document.createElement("input");
+        this.fileInput.type = "file";
+        this.fileInput.style.display = 'none';
+        this.fileInputForm.appendChild(this.fileInput);
+        this.element.appendChild(this.fileInputForm);
+        this.setupMenuListeners();
+    }
+
+    this.setupMenuListeners = () => {
         this.menu.on("show", () => {
             if (!this.selectedShape || this.selectedShape.points.length < 3) {
                 setTimeout(() => {
@@ -31,36 +58,52 @@ export default function Editor() {
             }
         })
         this.menu.on("click", (event) => {
-            const childCount = SmartShapeManager.getShapes().length;
-            const shapeOptions = {
-                id:this.selectedShape.options.id+"_child"+childCount,
-                name: "Shape #" + SmartShapeManager.shapes.length,
-                canAddPoints: true,
-                canDrag: true,
-                canScale: true,
-                canRotate: true,
-                pointOptions:{
-                    canDrag:true,
-                    canDelete:true
-                },
-                moveToTop: false,
-                groupChildShapes:false
-            };
-            if (event.itemId === "add_triangle") {
-                const shape = new SmartShape().init(this.selectedShape.root,shapeOptions,
-                    [[0,100],[50,0],[100,100]]);
-                this.selectedShape.addChild(shape);
-                SmartShapeManager.activateShape(shape);
-                this.studio.shapesPanel.setupShapeContextMenu(shape);
-            } else if (event.itemId === "add_square") {
-                const shape = new SmartShape().init(this.selectedShape.root,shapeOptions,
-                    [[0,100],[0,0],[100,0],[100,100]]);
-                this.selectedShape.addChild(shape);
-                SmartShapeManager.activateShape(shape);
-                this.studio.shapesPanel.setupShapeContextMenu(shape);
-
+            switch (event.itemId) {
+                case "add_triangle":
+                    this.addFigure([[0,100],[50,0],[100,100]],recursiveDeepCopy(this.newShapeOptions));
+                    break;
+                case "add_square":
+                    this.addFigure([[0,100],[0,0],[100,0],[100,100]], recursiveDeepCopy(this.newShapeOptions));
+                    break;
+                case "import_json":
+                    this.importJSON()
+                    break;
             }
         })
+        this.fileInput.addEventListener("change",this.uploadJSON)
+    }
+
+    this.addFigure = (points, options) => {
+        const childCount = SmartShapeManager.getShapes().length;
+        options.id =this.selectedShape.options.id+"_child"+childCount;
+        options.name = "Shape #" + SmartShapeManager.length();
+        const shape = new SmartShape().init(this.selectedShape.root,options,
+            points);
+        this.selectedShape.addChild(shape);
+        SmartShapeManager.activateShape(shape);
+        this.studio.shapesPanel.setupShapeContextMenu(shape);
+    }
+
+    this.importJSON = () => {
+        this.fileInput.click();
+    }
+
+    this.uploadJSON = async(event) => {
+        const result = await uploadTextFile(event.target);
+        if (!result) {
+            showAlert("Could not load shape from JSON")
+            return;
+        }
+        const shape = new SmartShape().fromJSON(this.selectedShape.root,result.data,true);
+        for (let child of shape.getChildren(true)) {
+            child.getParent().removeChild(child);
+            this.selectedShape.addChild(child);
+            child.setOptions({groupChildShapes: this.selectedShape.groupChildShapes});
+        }
+        shape.setOptions({groupChildShapes: this.selectedShape.groupChildShapes});
+        this.selectedShape.addChild(shape);
+        SmartShapeManager.activateShape(shape);
+        this.studio.shapesPanel.setupShapeContextMenu(shape);
     }
 
     this.setDisplayMode = () => {
@@ -82,8 +125,8 @@ export default function Editor() {
 
     this.addShape = () => {
         const shape = new SmartShape().init(this.element.querySelector("#shape_container"),{
-            id: "shape_"+SmartShapeManager.shapes.length,
-            name: "Shape #" + SmartShapeManager.shapes.length,
+            id: "shape_"+SmartShapeManager.length(),
+            name: "Shape #" + SmartShapeManager.length(),
             canAddPoints: true,
             canDrag: true,
             canScale: true,
@@ -94,16 +137,20 @@ export default function Editor() {
             },
             forceCreateEvent:true,
             moveToTop: false,
+            groupChildShapes: false
         },[[0,100],[100,0],[200,100]]);
         EventsManager.emit(Events.ADD_SHAPE,shape);
+        EventsManager.emit(Events.SELECT_SHAPE,shape);
     }
 
     this.selectShape = (event) => {
         if (!SmartShapeManager.getShape(event.target) || event.target.getRootParent()) {
             return
         }
+        if (this.selectedShape) {
+            this.selectedShape.hide();
+        }
         this.selectedShape = event.target;
-        SmartShapeManager.getShapes().forEach(shape=>shape.hide())
         this.selectedShape.show();
         this.selectedShape.getChildren(true).forEach(shape=>shape.show())
         SmartShapeManager.activateShape(this.selectedShape,SmartShapeDisplayMode.SELECTED);

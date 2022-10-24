@@ -2,7 +2,7 @@
   "name": "smartshape_designer",
   "private": false,
   "author": "Andrey Germanov <andrey@germanov.dev> (https://germanov.dev)",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
