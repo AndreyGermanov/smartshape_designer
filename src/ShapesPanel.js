@@ -135,6 +135,8 @@ export default function ShapesPanel() {
             return;
         }
         row.id = "row_"+shape.guid;
+        const deleteBtn = row.querySelector("span.fa");
+        deleteBtn.id = "delete_"+shape.guid;
         this.updateShape(shape);
     }
 
@@ -210,8 +212,8 @@ export default function ShapesPanel() {
         shape.removeAllChildren(true);
         children.forEach(item => child.addChild(item));
         EventsManager.emit(Events.REPLACE_SHAPE,child,{oldShape:shape});
-        EventsManager.emit(Events.SELECT_SHAPE,child);
         shape.destroy();
+        EventsManager.emit(Events.SELECT_SHAPE,child);
     }
 
     this.selectShape = (shape) => {
@@ -249,6 +251,7 @@ export default function ShapesPanel() {
         const guid = event.target.id.replace("delete_","");
         const shape = SmartShapeManager.getShapeByGuid(guid);
         if (shape) {
+            shape.getChildren(true).forEach(child => child.destroy());
             shape.destroy();
         }
     }

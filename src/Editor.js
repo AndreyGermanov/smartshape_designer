@@ -1,5 +1,11 @@
 import {Events} from "./events.js";
-import {EventsManager,SmartShape,SmartShapeManager,SmartShapeDisplayMode} from "./SmartShapeConnector.js";
+import {
+    EventsManager,
+    SmartShape,
+    SmartShapeManager,
+    SmartShapeDisplayMode,
+    ShapeEvents
+} from "./SmartShapeConnector.js";
 import {Menus} from "../context_menu/src/index.js";
 import Triangle from "./assets/triangle.png";
 import Square from "./assets/square.png";
@@ -85,6 +91,7 @@ export default function Editor() {
     }
 
     this.importJSON = () => {
+        this.fileInputForm.reset();
         this.fileInput.click();
     }
 
@@ -94,14 +101,18 @@ export default function Editor() {
             showAlert("Could not load shape from JSON")
             return;
         }
-        const shape = new SmartShape().fromJSON(this.selectedShape.root,result.data,true);
+        const shape = new SmartShape().fromJSON(this.selectedShape.root,result.data,true,false);
         for (let child of shape.getChildren(true)) {
             child.getParent().removeChild(child);
             this.selectedShape.addChild(child);
+            child.show();
             child.setOptions({groupChildShapes: this.selectedShape.groupChildShapes});
         }
         shape.setOptions({groupChildShapes: this.selectedShape.groupChildShapes});
+        shape.show();
+        shape.getChildren(true).forEach(child=>child.show())
         this.selectedShape.addChild(shape);
+        EventsManager.emit(ShapeEvents.SHAPE_CREATE,shape);
         SmartShapeManager.activateShape(shape);
         this.studio.shapesPanel.setupShapeContextMenu(shape);
     }
