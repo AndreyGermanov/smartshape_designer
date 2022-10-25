@@ -9,6 +9,7 @@ import {
 import {Menus} from "../context_menu/src/index.js";
 import Triangle from "./assets/triangle.png";
 import Square from "./assets/square.png";
+import Import from "./assets/document-import.png";
 import {uploadTextFile} from "./utils/uploadFile.js";
 import {showAlert} from "./utils/index.js";
 import {recursiveDeepCopy} from "./smart_shape/src/utils/index.js";
@@ -42,7 +43,7 @@ export default function Editor() {
         this.menu =Menus.create([
             {id:"add_triangle",title:"Add triangle",image:Triangle},
             {id:"add_square",title:"Add square",image:Square},
-            {id:"import_json",title:"Import from JSON"}
+            {id:"import_json",title:"Import from JSON",image:Import}
         ],
             document.getElementById("editorMenuBtn"),'click'
         );
@@ -88,6 +89,7 @@ export default function Editor() {
         this.selectedShape.addChild(shape);
         SmartShapeManager.activateShape(shape);
         this.studio.shapesPanel.setupShapeContextMenu(shape);
+        EventsManager.emit(ShapeEvents.SHAPE_MOVE,shape);
     }
 
     this.importJSON = () => {
@@ -107,12 +109,13 @@ export default function Editor() {
             this.selectedShape.addChild(child);
             child.show();
             child.setOptions({groupChildShapes: this.selectedShape.groupChildShapes});
+            this.studio.shapesPanel.setupShapeContextMenu(child);
         }
         shape.setOptions({groupChildShapes: this.selectedShape.groupChildShapes});
         shape.show();
-        shape.getChildren(true).forEach(child=>child.show())
         this.selectedShape.addChild(shape);
         EventsManager.emit(ShapeEvents.SHAPE_CREATE,shape);
+        EventsManager.emit(ShapeEvents.SHAPE_MOVE,shape);
         SmartShapeManager.activateShape(shape);
         this.studio.shapesPanel.setupShapeContextMenu(shape);
     }

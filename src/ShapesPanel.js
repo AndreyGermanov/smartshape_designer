@@ -158,36 +158,37 @@ export default function ShapesPanel() {
     }
 
     this.setupShapeContextMenu = (shape) => {
-        if (shape.contextMenu && !shape.contextMenuUpdated) {
-            shape.contextMenu.on("show",() => {
-                const destroyId = shape.contextMenu.items.findIndex(item => item.id === "i"+shape.guid+"_destroy");
+        if (shape.shapeMenu && shape.shapeMenu.contextMenu && !shape.contextMenuUpdated) {
+            shape.shapeMenu.contextMenu.on("show",() => {
+                const destroyId = shape.shapeMenu.contextMenu.items.findIndex(item => item.id === "i"+shape.guid+"_destroy");
                 let img = null;
                 if (destroyId !== -1) {
-                    img = shape.contextMenu.items[destroyId].image;
-                    shape.contextMenu.items.splice(destroyId,1)
+                    img = shape.shapeMenu.contextMenu.items[destroyId].image;
+                    shape.shapeMenu.contextMenu.items.splice(destroyId,1)
                 }
-                const deleteId = shape.contextMenu.items.findIndex(item => item.id === "i"+shape.guid+"_delete");
+                const deleteId = shape.shapeMenu.contextMenu.items.findIndex(item => item.id === "i"+shape.guid+"_delete");
                 if (deleteId === -1) {
-                    shape.contextMenu.addItem("i"+shape.guid+"_delete","Destroy",img);
+                    shape.shapeMenu.contextMenu.addItem("i"+shape.guid+"_delete","Destroy",img);
                 }
             })
-            shape.contextMenu.on("click", (event) => {
+            shape.shapeMenu.contextMenu.on("click", (event) => {
                 if (event.itemId === "i" + shape.guid + "_clone") {
                     setTimeout(() => {
-                        const parent = shape.getRootParent();
+                        let parent = shape.getRootParent();
                         if (parent) {
                             parent.addChild(SmartShapeManager.activeShape);
                         } else {
                             shape.addChild(SmartShapeManager.activeShape);
                         }
-                        if (shape.contextMenu) {
+                        if (shape.shapeMenu.contextMenu) {
                             this.setupShapeContextMenu(shape);
-                            shape.displayGroupItems();
+                            shape.shapeMenu.displayGroupItems();
                         }
-                        if (SmartShapeManager.activeShape.contextMenu) {
+                        if (SmartShapeManager.activeShape.shapeMenu.contextMenu) {
                             this.setupShapeContextMenu(SmartShapeManager.activeShape);
-                            SmartShapeManager.activeShape.displayGroupItems();
+                            SmartShapeManager.activeShape.shapeMenu.displayGroupItems();
                         }
+                        this.updateShape(shape);
                     },100)
                 } else if (event.itemId === "i" + shape.guid + "_delete") {
                     this.onDestroyShape(shape);
@@ -206,6 +207,9 @@ export default function ShapesPanel() {
         const children = shape.getChildren(true);
         if (!children.length || shape.options.groupChildShapes) {
             shape.destroy();
+            if (parent) {
+                EventsManager.emit(ShapeEvents.SHAPE_MOVE, parent)
+            }
             return;
         }
         const child = children.shift();
@@ -214,6 +218,11 @@ export default function ShapesPanel() {
         EventsManager.emit(Events.REPLACE_SHAPE,child,{oldShape:shape});
         shape.destroy();
         EventsManager.emit(Events.SELECT_SHAPE,child);
+        if (parent) {
+            EventsManager.emit(ShapeEvents.SHAPE_MOVE, parent)
+        } else {
+            EventsManager.emit(ShapeEvents.SHAPE_MOVE, child)
+        }
     }
 
     this.selectShape = (shape) => {
