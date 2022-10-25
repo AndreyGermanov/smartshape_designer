@@ -11,7 +11,7 @@ import Triangle from "./assets/triangle.png";
 import Square from "./assets/square.png";
 import Import from "./assets/document-import.png";
 import {uploadTextFile} from "./utils/uploadFile.js";
-import {showAlert} from "./utils/index.js";
+import {mergeObjects, showAlert} from "./utils/index.js";
 import {recursiveDeepCopy} from "./smart_shape/src/utils/index.js";
 
 export default function Editor() {
@@ -138,21 +138,12 @@ export default function Editor() {
     }
 
     this.addShape = () => {
-        const shape = new SmartShape().init(this.element.querySelector("#shape_container"),{
+        const options = mergeObjects({},this.newShapeOptions,{
             id: "shape_"+SmartShapeManager.length(),
             name: "Shape #" + SmartShapeManager.length(),
-            canAddPoints: true,
-            canDrag: true,
-            canScale: true,
-            canRotate: true,
-            pointOptions:{
-                canDrag:true,
-                canDelete:true
-            },
-            forceCreateEvent:true,
-            moveToTop: false,
-            groupChildShapes: false
-        },[[0,100],[100,0],[200,100]]);
+        });
+        const shape = new SmartShape().init(this.element.querySelector("#shape_container"),
+            options,[[0,100],[100,0],[200,100]]);
         EventsManager.emit(Events.ADD_SHAPE,shape);
         EventsManager.emit(Events.SELECT_SHAPE,shape);
     }

@@ -37,23 +37,8 @@ export default function ShapesPanel() {
     }
 
     this.setEventListeners = () => {
-        this.element.querySelector("#panelAddBtn").addEventListener("click", this.addShape)
-        EventsManager.subscribe("create",(event) => {
-            if (event.target.eventListener &&
-                event.target.options &&
-                event.target.options.id &&
-                event.target.options.id.search("_clone") === -1 &&
-                event.target.options.id.search("_child") === -1 &&
-                event.target.options.id.search("_resizebox") === -1 &&
-                event.target.options.id.search("_rotatebox") === -1 &&
-                !event.target.getParent()
-            ) {
-                if (!event.parent) {
-                    event.target.hide();
-                    this.addShapeCell(event.target);
-                }
-            }
-        })
+        this.element.querySelector("#panelAddBtn").addEventListener("click", this.onAddShapeClick)
+        EventsManager.subscribe("create",this.onShapeCreated)
         EventsManager.subscribe(Events.SELECT_SHAPE, (event) => {
             this.selectShape(event.target);
         })
@@ -67,34 +52,14 @@ export default function ShapesPanel() {
             ShapeEvents.POINT_DRAG_MOVE,
             ShapeEvents.POINT_ADDED,
             ShapeEvents.POINT_DESTROYED
-        ],async(event) => {
-            if (event.target.points &&
-                event.target.options.id.search("_resizebox") === -1 &&
-                event.target.options.id.search("_rotatebox") === -1 &&
-                event.target.points.length) {
-                const parent = event.target.getParent();
-                if (parent) {
-                    await this.updateShape(parent);
-                } else {
-                    await this.updateShape(event.target);
-                }
-
-            }
-        });
-        EventsManager.subscribe(Events.CHANGE_SHAPE_OPTIONS,async(event) => {
-            const parent = event.target.getParent();
-            if (parent) {
-                await this.updateShape(parent);
-            } else {
-                await this.updateShape(event.target);
-            }
-        });
+        ],this.onShapeUpdated);
+        EventsManager.subscribe(Events.CHANGE_SHAPE_OPTIONS,this.onShapeOptionsChanged);
         EventsManager.subscribe(Events.REPLACE_SHAPE, (event) => {
             this.replaceShapeCell(event.target,event.oldShape);
         })
     }
 
-    this.addShape = () => {
+    this.onAddShapeClick = () => {
         const shape = new SmartShape().init(document.querySelector("#shape_container"),{
             id: "shape_"+SmartShapeManager.length(),
             name: "Shape #" + SmartShapeManager.length(),
@@ -113,22 +78,6 @@ export default function ShapesPanel() {
         EventsManager.emit(Events.SELECT_SHAPE,shape);
     }
 
-    this.addShapeCell = (shape) => {
-        const id = "row_"+shape.guid;
-        if (this.element.querySelector("#"+id)) {
-            return
-        }
-        const row = this.element.querySelector(".shape_row").cloneNode(true);
-        row.id = id
-        row.addEventListener("click", this.onShapeRowClick);
-        const deleteBtn = row.querySelector("span.fa");
-        deleteBtn.id = "delete_"+shape.guid;
-        deleteBtn.addEventListener("click",this.onDeleteShapeClick);
-        row.style.display = '';
-        this.element.querySelector(".shape_row").parentNode.appendChild(row);
-        this.updateShape(shape);
-    }
-
     this.replaceShapeCell = (shape,oldShape) => {
         const row = this.element.querySelector("#row_"+oldShape.guid);
         if (!row) {
@@ -137,7 +86,7 @@ export default function ShapesPanel() {
         row.id = "row_"+shape.guid;
         const deleteBtn = row.querySelector("span.fa");
         deleteBtn.id = "delete_"+shape.guid;
-        this.updateShape(shape);
+        this.updateShape(shape).then();
     }
 
     this.updateShape = async (shape) => {
@@ -155,74 +104,6 @@ export default function ShapesPanel() {
         row.querySelector(".shape_name").innerHTML = shape.options.name;
         row.querySelector(".shape_id").innerHTML = "("+shape.options.id+")";
         this.setupShapeContextMenu(shape);
-    }
-
-    this.setupShapeContextMenu = (shape) => {
-        if (shape.shapeMenu && shape.shapeMenu.contextMenu && !shape.contextMenuUpdated) {
-            shape.shapeMenu.contextMenu.on("show",() => {
-                const destroyId = shape.shapeMenu.contextMenu.items.findIndex(item => item.id === "i"+shape.guid+"_destroy");
-                let img = null;
-                if (destroyId !== -1) {
-                    img = shape.shapeMenu.contextMenu.items[destroyId].image;
-                    shape.shapeMenu.contextMenu.items.splice(destroyId,1)
-                }
-                const deleteId = shape.shapeMenu.contextMenu.items.findIndex(item => item.id === "i"+shape.guid+"_delete");
-                if (deleteId === -1) {
-                    shape.shapeMenu.contextMenu.addItem("i"+shape.guid+"_delete","Destroy",img);
-                }
-            })
-            shape.shapeMenu.contextMenu.on("click", (event) => {
-                if (event.itemId === "i" + shape.guid + "_clone") {
-                    setTimeout(() => {
-                        let parent = shape.getRootParent();
-                        if (parent) {
-                            parent.addChild(SmartShapeManager.activeShape);
-                        } else {
-                            shape.addChild(SmartShapeManager.activeShape);
-                        }
-                        if (shape.shapeMenu.contextMenu) {
-                            this.setupShapeContextMenu(shape);
-                            shape.shapeMenu.displayGroupItems();
-                        }
-                        if (SmartShapeManager.activeShape.shapeMenu.contextMenu) {
-                            this.setupShapeContextMenu(SmartShapeManager.activeShape);
-                            SmartShapeManager.activeShape.shapeMenu.displayGroupItems();
-                        }
-                        this.updateShape(shape);
-                    },100)
-                } else if (event.itemId === "i" + shape.guid + "_delete") {
-                    this.onDestroyShape(shape);
-                }
-            })
-            shape.contextMenuUpdated = true;
-        }
-    }
-
-    this.onDestroyShape = (shape) => {
-        const parent = shape.getRootParent();
-        if (parent && parent.options.groupChildShapes) {
-            parent.destroy();
-            return;
-        }
-        const children = shape.getChildren(true);
-        if (!children.length || shape.options.groupChildShapes) {
-            shape.destroy();
-            if (parent) {
-                EventsManager.emit(ShapeEvents.SHAPE_MOVE, parent)
-            }
-            return;
-        }
-        const child = children.shift();
-        shape.removeAllChildren(true);
-        children.forEach(item => child.addChild(item));
-        EventsManager.emit(Events.REPLACE_SHAPE,child,{oldShape:shape});
-        shape.destroy();
-        EventsManager.emit(Events.SELECT_SHAPE,child);
-        if (parent) {
-            EventsManager.emit(ShapeEvents.SHAPE_MOVE, parent)
-        } else {
-            EventsManager.emit(ShapeEvents.SHAPE_MOVE, child)
-        }
     }
 
     this.selectShape = (shape) => {
@@ -263,6 +144,62 @@ export default function ShapesPanel() {
             shape.getChildren(true).forEach(child => child.destroy());
             shape.destroy();
         }
+    }
+
+    this.onShapeUpdated = async(event) => {
+        if (event.target.points &&
+            event.target.options.id.search("_resizebox") === -1 &&
+            event.target.options.id.search("_rotatebox") === -1 &&
+            event.target.points.length) {
+            const parent = event.target.getParent();
+            if (parent) {
+                await this.updateShape(parent);
+            } else {
+                await this.updateShape(event.target);
+            }
+
+        }
+    }
+
+    this.onShapeOptionsChanged = async(event) => {
+        const parent = event.target.getParent();
+        if (parent) {
+            await this.updateShape(parent);
+        } else {
+            await this.updateShape(event.target);
+        }
+    }
+
+    this.onShapeCreated = (event) => {
+        if (event.target.eventListener &&
+            event.target.options &&
+            event.target.options.id &&
+            event.target.options.id.search("_clone") === -1 &&
+            event.target.options.id.search("_child") === -1 &&
+            event.target.options.id.search("_resizebox") === -1 &&
+            event.target.options.id.search("_rotatebox") === -1 &&
+            !event.target.getParent() &&
+            !event.parent
+        ) {
+            event.target.hide();
+            this.addShapeCell(event.target);
+        }
+    }
+
+    this.addShapeCell = (shape) => {
+        const id = "row_"+shape.guid;
+        if (this.element.querySelector("#"+id)) {
+            return
+        }
+        const row = this.element.querySelector(".shape_row").cloneNode(true);
+        row.id = id
+        row.addEventListener("click", this.onShapeRowClick);
+        const deleteBtn = row.querySelector("span.fa");
+        deleteBtn.id = "delete_"+shape.guid;
+        deleteBtn.addEventListener("click",this.onDeleteShapeClick);
+        row.style.display = '';
+        this.element.querySelector(".shape_row").parentNode.appendChild(row);
+        this.updateShape(shape).then();
     }
 
     this.onShapeDestroyed = (event) => {
@@ -314,6 +251,82 @@ export default function ShapesPanel() {
                 this.element.querySelector("#uploadForm").reset();
                 EventsManager.emit(Events.SELECT_SHAPE,SmartShapeManager.getShapes()[0]);
             },100)
+        }
+    }
+
+    this.setupShapeContextMenu = (shape) => {
+        if (shape.shapeMenu && shape.shapeMenu.contextMenu && !shape.contextMenuUpdated) {
+            shape.shapeMenu.contextMenu.on("show", () => this.onShowContextMenu(shape))
+            shape.shapeMenu.contextMenu.on("click", (event) => this.onContextMenuClick(shape,event))
+            shape.contextMenuUpdated = true;
+        }
+    }
+
+    this.onShowContextMenu = (shape) => {
+        const destroyId = shape.shapeMenu.contextMenu.items.findIndex(item => item.id === "i"+shape.guid+"_destroy");
+        let img = null;
+        if (destroyId !== -1) {
+            img = shape.shapeMenu.contextMenu.items[destroyId].image;
+            shape.shapeMenu.contextMenu.items.splice(destroyId,1)
+        }
+        const deleteId = shape.shapeMenu.contextMenu.items.findIndex(item => item.id === "i"+shape.guid+"_delete");
+        if (deleteId === -1) {
+            shape.shapeMenu.contextMenu.addItem("i" + shape.guid + "_delete", "Destroy", img);
+        }
+    }
+
+    this.onContextMenuClick = (shape,event) => {
+        if (event.itemId === "i" + shape.guid + "_clone") {
+            this.onCloneShapeMenuClick(shape)
+        } else if (event.itemId === "i" + shape.guid + "_delete") {
+            this.onDestroyShapeMenuClick(shape);
+        }
+    }
+
+    this.onCloneShapeMenuClick = (shape) => {
+        setTimeout(() => {
+            let parent = shape.getRootParent();
+            if (parent) {
+                parent.addChild(SmartShapeManager.activeShape);
+            } else {
+                shape.addChild(SmartShapeManager.activeShape);
+            }
+            if (shape.shapeMenu.contextMenu) {
+                this.setupShapeContextMenu(shape);
+                shape.shapeMenu.displayGroupItems();
+            }
+            if (SmartShapeManager.activeShape.shapeMenu.contextMenu) {
+                this.setupShapeContextMenu(SmartShapeManager.activeShape);
+                SmartShapeManager.activeShape.shapeMenu.displayGroupItems();
+            }
+            this.updateShape(shape).then();
+        },100)
+    }
+
+    this.onDestroyShapeMenuClick = (shape) => {
+        const parent = shape.getRootParent();
+        if (parent && parent.options.groupChildShapes) {
+            parent.destroy();
+            return;
+        }
+        const children = shape.getChildren(true);
+        if (!children.length || shape.options.groupChildShapes) {
+            shape.destroy();
+            if (parent) {
+                EventsManager.emit(ShapeEvents.SHAPE_MOVE, parent)
+            }
+            return;
+        }
+        const child = children.shift();
+        shape.removeAllChildren(true);
+        children.forEach(item => child.addChild(item));
+        EventsManager.emit(Events.REPLACE_SHAPE,child,{oldShape:shape});
+        shape.destroy();
+        EventsManager.emit(Events.SELECT_SHAPE,child);
+        if (parent) {
+            EventsManager.emit(ShapeEvents.SHAPE_MOVE, parent)
+        } else {
+            EventsManager.emit(ShapeEvents.SHAPE_MOVE, child)
         }
     }
 }
