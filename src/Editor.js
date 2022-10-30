@@ -13,7 +13,7 @@ import Import from "./assets/document-import.png";
 import {uploadTextFile} from "./utils/uploadFile.js";
 import {mergeObjects, showAlert} from "./utils/index.js";
 import {recursiveDeepCopy} from "./smart_shape/src/utils/index.js";
-
+import Grid from "./assets/grid.png";
 export default function Editor() {
     this.selectedShape = null;
     this.element = document.querySelector("#editor");
@@ -34,6 +34,7 @@ export default function Editor() {
 
     this.init = (studio) => {
         this.studio = studio;
+        this.element.querySelector("#shape_container").style.backgroundImage = "url('"+Grid+"')"
         this.setupMenu();
         this.setDisplayMode();
         this.setEventListeners();
