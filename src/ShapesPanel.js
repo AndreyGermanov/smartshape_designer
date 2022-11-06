@@ -3,6 +3,7 @@ import {Events} from "./events.js";
 import {applyAspectRatio} from "./utils/geometry.js";
 import {uploadTextFile} from "./utils/uploadFile.js";
 import {showAlert} from "./utils/index.js";
+import SmartShapeDrawHelper from "./smart_shape/src/SmartShape/SmartShapeDrawHelper.js";
 
 export default function ShapesPanel() {
 
@@ -48,6 +49,7 @@ export default function ShapesPanel() {
         EventsManager.subscribe([
             ShapeEvents.SHAPE_MOVE,
             ShapeEvents.SHAPE_RESIZE,
+            ShapeEvents.SHAPE_REDRAWED,
             ShapeEvents.SHAPE_ROTATE,
             ShapeEvents.POINT_DRAG_MOVE,
             ShapeEvents.POINT_ADDED,
@@ -103,6 +105,7 @@ export default function ShapesPanel() {
         img.src = await shape.toPng("dataurl",width,height,true);
         row.querySelector(".shape_name").innerHTML = shape.options.name;
         row.querySelector(".shape_id").innerHTML = "("+shape.options.id+")";
+        shape.redraw();
         this.setupShapeContextMenu(shape);
     }
 
@@ -140,6 +143,7 @@ export default function ShapesPanel() {
     this.onDeleteShapeClick = (event) => {
         const guid = event.target.id.replace("delete_","");
         const shape = SmartShapeManager.getShapeByGuid(guid);
+        const parent = shape.getParent();
         if (shape) {
             shape.getChildren(true).forEach(child => child.destroy());
             shape.destroy();
@@ -183,6 +187,7 @@ export default function ShapesPanel() {
         ) {
             event.target.hide();
             this.addShapeCell(event.target);
+            EventsManager.emit(Events.SELECT_SHAPE,event.target,{});
         }
     }
 
@@ -281,6 +286,12 @@ export default function ShapesPanel() {
         } else if (event.itemId === "i" + shape.guid + "_delete") {
             this.onDestroyShapeMenuClick(shape);
         }
+        const parent = shape.getRootParent();
+        if (parent) {
+            this.updateShape(parent);
+        } else {
+            this.updateShape(shape);
+        }
     }
 
     this.onCloneShapeMenuClick = (shape) => {
@@ -299,7 +310,11 @@ export default function ShapesPanel() {
                 this.setupShapeContextMenu(SmartShapeManager.activeShape);
                 SmartShapeManager.activeShape.shapeMenu.displayGroupItems();
             }
-            this.updateShape(shape).then();
+            this.updateShape(shape).then(() => {
+                if (SmartShapeManager.activeShape) {
+                    SmartShapeManager.activateShape(SmartShapeManager.activeShape,SmartShapeDisplayMode.SELECTED);
+                }
+            });
         },100)
     }
 

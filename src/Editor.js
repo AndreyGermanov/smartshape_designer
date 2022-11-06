@@ -88,7 +88,7 @@ export default function Editor() {
         const shape = new SmartShape().init(this.selectedShape.root,options,
             points);
         this.selectedShape.addChild(shape);
-        SmartShapeManager.activateShape(shape);
+        SmartShapeManager.activateShape(shape,SmartShapeDisplayMode.SELECTED);
         this.studio.shapesPanel.setupShapeContextMenu(shape);
         EventsManager.emit(ShapeEvents.SHAPE_MOVE,shape);
     }
@@ -117,7 +117,7 @@ export default function Editor() {
         this.selectedShape.addChild(shape);
         EventsManager.emit(ShapeEvents.SHAPE_CREATE,shape);
         EventsManager.emit(ShapeEvents.SHAPE_MOVE,shape);
-        SmartShapeManager.activateShape(shape);
+        SmartShapeManager.activateShape(shape,SmartShapeDisplayMode.SELECTED);
         this.studio.shapesPanel.setupShapeContextMenu(shape);
     }
 
@@ -158,7 +158,6 @@ export default function Editor() {
         }
         this.selectedShape = event.target;
         this.selectedShape.show();
-        this.selectedShape.getChildren(true).forEach(shape=>shape.show())
         SmartShapeManager.activateShape(this.selectedShape,SmartShapeDisplayMode.SELECTED);
         this.setDisplayMode();
     }
